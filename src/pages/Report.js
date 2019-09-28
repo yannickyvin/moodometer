@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { Bar, Doughnut } from 'react-chartjs-2'
-import { getMood, getHistory } from '../moodClient'
+import { getTodayMoods, getHistory } from '../moodClient'
 import MOOD from '../mood'
 
 const Today = ({ mood }) => (
@@ -61,7 +61,7 @@ class App extends Component {
   }
 
   refresh = async () => {
-    const todayMood = await getMood()
+    const todayMood = await getTodayMoods()
     const history = await getHistory()
     this.setState({ todayMood, history })
   }

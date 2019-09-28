@@ -1,19 +1,19 @@
 {
-  "name": "moodometer-api",
+  "name": "randouest-api",
   "version": "1.0.0",
   "description": "",
-  "main": "handler.js",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "aws-sdk": "^2.441.0",
-    "jest": "^24.8.0",
-    "serverless": "^1.41.0",
-    "serverless-offline": "^4.9.4"
+    "nodemon": "^1.19.1"
   },
-  "scripts": {
-    "start": "serverless offline start --port 4000",
-    "deploy": "serverless deploy --verbose",
-    "test": "jest"
+  "dependencies": {
+    "express": "^4.17.1",
+    "pg": "^7.12.1"
   }
 }
