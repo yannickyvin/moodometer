@@ -22,10 +22,10 @@ const Options = ({ onSelect }) => (
     {MOOD.options.map(o => (
       <button
         key={o.rate}
-        className={`btn ${o.button} btn-xl m-2`}
+        className={`btn btn-xl m-2`}
         onClick={() => onSelect(o.rate)}
       >
-        {o.label}
+        <img className={`emoji`} src={o.img}/>
       </button>
     ))}
   </div>
@@ -38,10 +38,6 @@ class Vote extends Component {
   }
 
   handleSelect = async moodId => {
-    /*const userMood = Object.assign(
-      {},
-      ...MOOD.options.map(o => ({ [o.id]: 0, [moodId]: 1 }))
-    )*/
     this.setState({showToast: true})
     const userMood = {
       session: id,
@@ -64,9 +60,9 @@ class Vote extends Component {
           <div className="toast-content">
             <Toast onClose={() => this.setState({showToast: false})} show={this.state.showToast} delay={3000} autohide>
               <Toast.Header>
-                <strong className="mr-auto">Humeur enregistré</strong>
+                <strong className="mr-auto">Humeur enregistrée</strong>
               </Toast.Header>
-              <Toast.Body>N'oublie pas de vérifier si tu es de Maki</Toast.Body>
+              <Toast.Body>N'oublies pas de vérifier si tu es de Maki</Toast.Body>
             </Toast>
           </div>
         </div>

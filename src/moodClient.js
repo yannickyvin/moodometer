@@ -3,7 +3,7 @@ const apiUrl = process.env.REACT_APP_API_URL
 
 export const getTodayMoods = async () => {
   try {
-    const response = await fetch(`${apiUrl}/moods/date=${dateOfDay}`)
+    const response = await fetch(`${apiUrl}/moods/?date=${dateOfDay}`)
     const content = await response.json()
     return content
   } catch (e) {

@@ -4,15 +4,15 @@ import { Bar, Doughnut } from 'react-chartjs-2'
 import { getTodayMoods, getHistory } from '../moodClient'
 import MOOD from '../mood'
 
-const Today = ({ mood }) => (
+const Today = ({ report }) => (
   <Doughnut
     options={{ maintainAspectRatio: false, legend: false, rotation: 1.57 }}
     data={{
-      labels: MOOD.options.map(o => o.label),
+      labels: report.map(o => o.label),
       datasets: [
         {
-          data: mood && MOOD.options.map(o => mood[o.id]),
-          backgroundColor: MOOD.options.map(o => o.color),
+          data: report.map(o => o.count),
+          backgroundColor: report.map(o => o.color),
         },
       ],
     }}
@@ -53,6 +53,8 @@ class App extends Component {
   state = {
     history: null,
     todayMood: null,
+    dayReport: [],
+    completeReport: [],
   }
 
   componentDidMount() {
@@ -63,20 +65,50 @@ class App extends Component {
   refresh = async () => {
     const todayMood = await getTodayMoods()
     const history = await getHistory()
-    this.setState({ todayMood, history })
+    const dayReport = this.createDayReport(todayMood);
+    const completeReport = this.createCompleteReport(history);
+    this.setState({ todayMood, history, dayReport, completeReport })
+  }
+
+  createDayReport = (moods) => {
+    let dayReport = [...MOOD.options];
+    dayReport = dayReport.map((option) => ({...option, count: 0}))
+    if (moods !== null && moods.length !== undefined) {
+      moods.forEach((mood) => {
+        for (let i = 0; i < dayReport.length; i++) {
+          if (dayReport[i].rate === mood.rate) {dayReport[i].count += 1}
+        }
+      })
+    }
+    console.log(dayReport)
+    return dayReport;
+  }
+
+  createCompleteReport = (moods) => {
+    let dayReport = [...MOOD.options];
+    dayReport = dayReport.map((option) => ({...option, count: 0}))
+    if (moods !== null && moods.length !== undefined) {
+      moods.forEach((mood) => {
+        for (let i = 0; i < dayReport.length; i++) {
+          if (dayReport[i].rate === mood.rate) {dayReport[i].count += 1}
+        }
+      })
+    }
+    console.log(dayReport)
+    return dayReport;
   }
 
   render() {
     return (
       <div className="app">
         <header>
-          <a href="https://github.com/slavagu/moodometer">moodometer</a>
+          <a href="https://github.com/yannickyvin/moodometer">sushimeter</a>
         </header>
         <div className="app-content">
           <div>
-            <Today mood={this.state.todayMood} />
+            <Today report={this.state.dayReport} />
           </div>
-          <p className="font-weight-light text-muted">today</p>
+          <p className="font-weight-light text-muted">Aujourd'hui</p>
           <div className="h-50">
             <Trend history={this.state.history} />
           </div>

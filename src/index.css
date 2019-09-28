@@ -37,3 +37,7 @@ body {
 .btn-xl {
   font-size: calc(14px + 3vmin);
 }
+
+.emoji {
+  width: 100px;
+}
