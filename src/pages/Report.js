@@ -51,8 +51,6 @@ const Trend = ({ completeReport }) => {
 
 class App extends Component {
   state = {
-    history: null,
-    todayMood: null,
     dayReport: [],
     completeReport: [],
   }
@@ -67,7 +65,7 @@ class App extends Component {
     const history = await getHistory()
     const dayReport = this.createTodayReport(todayMood)
     const completeReport = this.createCompleteReport(history)
-    this.setState({ todayMood, history, dayReport, completeReport })
+    this.setState({ dayReport, completeReport })
   }
 
   createTodayReport = (moods) => {
@@ -89,15 +87,14 @@ class App extends Component {
     
     if (moods !== null && moods.length !== undefined) {
       moods.forEach((mood) => {
-        
-        // on regarde si le jour a déjà été rencontré et enregistré dans notre rapport
+        // is day already known ?
         const found = report[0].datas.findIndex((data) => (data.day === mood.day))
         
         if (found === -1) {
-          // nouveau jour trouvé => on ajoute le jour à toutes les options en initialisant count à 0 ou 1
+          // day new => add day to each option and init count 
           report = report.map((option) => ({...option, datas: [...option.datas, {day: mood.day, count: mood.rate === option.rate ? 1 : 0}]}))
         } else {
-          // jour déjà présent => on incrémente le compteur de la journée de la bonne option
+          // day not new => increment count on specific option 
           for (let i = 0; i < report.length; i++) {
             if (report[i].rate === mood.rate ) {report[i].datas[found].count += 1}
           }
