@@ -13,11 +13,11 @@ const pool = new Pool({
 
 module.exports = {
   getAllMoods: (params) => {
-    const text = "select session, TO_CHAR(day, 'DD-MM-YYYY'), rate from mood";
+    const text = "select session, TO_CHAR(day, 'DD-MM-YYYY') as day, rate from mood order by mood.day";
     return pool.query(text, params);
   },
   getMoodsByDate: (params) => {
-    const text = "select session, TO_CHAR(day, 'DD-MM-YYYY'), rate from mood where day=TO_DATE($1, 'DD-MM-YYYY')";
+    const text = "select session, TO_CHAR(day, 'DD-MM-YYYY') as day, rate from mood where day=TO_DATE($1, 'DD-MM-YYYY')";
     return pool.query(text, params);
   },
   updateMood: (params) => {

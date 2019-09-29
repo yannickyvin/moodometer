@@ -4,30 +4,30 @@ import { Bar, Doughnut } from 'react-chartjs-2'
 import { getTodayMoods, getHistory } from '../moodClient'
 import MOOD from '../mood'
 
-const Today = ({ report }) => (
+const Today = ({ dayReport }) => (
   <Doughnut
     options={{ maintainAspectRatio: false, legend: false, rotation: 1.57 }}
     data={{
-      labels: report.map(o => o.label),
+      labels: dayReport.map(o => o.label),
       datasets: [
         {
-          data: report.map(o => o.count),
-          backgroundColor: report.map(o => o.color),
+          data: dayReport.map(o => o.count),
+          backgroundColor: dayReport.map(o => o.color),
         },
       ],
     }}
   />
 )
 
-const Trend = ({ history }) => {
-  if (!history) return null
+const Trend = ({ completeReport }) => {
+  if ((!completeReport) || (completeReport.length === 0))  return null
 
   const data = {
-    labels: history.map(m => m.date),
-    datasets: MOOD.options.map(o => ({
+    labels: completeReport[0].datas.map(m => m.day),
+    datasets: completeReport.map(o => ({
       label: o.label,
       type: 'line',
-      data: history.map(m => m[o.id]),
+      data: o.datas.map(c => (c.count)),
       fill: false,
       borderColor: o.color,
       backgroundColor: o.color,
@@ -65,13 +65,13 @@ class App extends Component {
   refresh = async () => {
     const todayMood = await getTodayMoods()
     const history = await getHistory()
-    const dayReport = this.createDayReport(todayMood);
-    const completeReport = this.createCompleteReport(history);
+    const dayReport = this.createTodayReport(todayMood)
+    const completeReport = this.createCompleteReport(history)
     this.setState({ todayMood, history, dayReport, completeReport })
   }
 
-  createDayReport = (moods) => {
-    let dayReport = [...MOOD.options];
+  createTodayReport = (moods) => {
+    let dayReport = [...MOOD.options]
     dayReport = dayReport.map((option) => ({...option, count: 0}))
     if (moods !== null && moods.length !== undefined) {
       moods.forEach((mood) => {
@@ -80,22 +80,32 @@ class App extends Component {
         }
       })
     }
-    console.log(dayReport)
-    return dayReport;
+    return dayReport
   }
-
+  
   createCompleteReport = (moods) => {
-    let dayReport = [...MOOD.options];
-    dayReport = dayReport.map((option) => ({...option, count: 0}))
+    let report = [...MOOD.options]
+    report = report.map((option) => ({...option, datas: []}))
+    
     if (moods !== null && moods.length !== undefined) {
       moods.forEach((mood) => {
-        for (let i = 0; i < dayReport.length; i++) {
-          if (dayReport[i].rate === mood.rate) {dayReport[i].count += 1}
+        
+        // on regarde si le jour a déjà été rencontré et enregistré dans notre rapport
+        const found = report[0].datas.findIndex((data) => (data.day === mood.day))
+        
+        if (found === -1) {
+          // nouveau jour trouvé => on ajoute le jour à toutes les options en initialisant count à 0 ou 1
+          report = report.map((option) => ({...option, datas: [...option.datas, {day: mood.day, count: mood.rate === option.rate ? 1 : 0}]}))
+        } else {
+          // jour déjà présent => on incrémente le compteur de la journée de la bonne option
+          for (let i = 0; i < report.length; i++) {
+            if (report[i].rate === mood.rate ) {report[i].datas[found].count += 1}
+          }
         }
       })
     }
-    console.log(dayReport)
-    return dayReport;
+   
+    return report
   }
 
   render() {
@@ -106,11 +116,11 @@ class App extends Component {
         </header>
         <div className="app-content">
           <div>
-            <Today report={this.state.dayReport} />
+            <Today dayReport={this.state.dayReport} />
           </div>
           <p className="font-weight-light text-muted">Aujourd'hui</p>
           <div className="h-50">
-            <Trend history={this.state.history} />
+            <Trend completeReport={this.state.completeReport} />
           </div>
         </div>
         <footer>

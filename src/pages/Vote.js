@@ -8,8 +8,6 @@ import { dateOfDay } from '../service.js'
 const uniqid = require('uniqid')
 let id
 
-console.log('id', window.localStorage.getItem('id'))
-
 if (window.localStorage.getItem('id') === null ) {
   id = uniqid(id);
   window.localStorage.setItem('id', id)
@@ -58,11 +56,11 @@ class Vote extends Component {
           <p>{MOOD.question}</p>
           <Options onSelect={this.handleSelect} />
           <div className="toast-content">
-            <Toast onClose={() => this.setState({showToast: false})} show={this.state.showToast} delay={3000} autohide>
+            <Toast onClose={() => this.setState({showToast: false})} show={this.state.showToast} delay={1500} autohide>
               <Toast.Header>
-                <strong className="mr-auto">Humeur enregistrée</strong>
+                <strong className="mr-auto">{MOOD.toastHead}</strong>
               </Toast.Header>
-              <Toast.Body>N'oublies pas de vérifier si tu es de Maki</Toast.Body>
+              <Toast.Body>{MOOD.toastBody}</Toast.Body>
             </Toast>
           </div>
         </div>
@@ -70,7 +68,7 @@ class Vote extends Component {
         
         
         <footer>
-          <Link to="/report">Report</Link>
+          <Link to="/report">Rapport</Link>
         </footer>
       </div>
     )
