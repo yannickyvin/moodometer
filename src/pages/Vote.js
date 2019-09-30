@@ -2,14 +2,13 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { postMood } from '../moodClient'
 import MOOD from '../mood'
-import Toast from 'react-bootstrap/Toast'
 import { dateOfDay } from '../service.js'
+import uniqid from 'uniqid'
 
-const uniqid = require('uniqid')
 let id
 
 if (window.localStorage.getItem('id') === null ) {
-  id = uniqid(id);
+  id = uniqid();
   window.localStorage.setItem('id', id)
 } else {
   id = window.localStorage.getItem('id')
@@ -31,12 +30,7 @@ const Options = ({ onSelect }) => (
 
 class Vote extends Component {
 
-  state = {
-    showToast: false
-  }
-
   handleSelect = async moodId => {
-    this.setState({showToast: true})
     const userMood = {
       session: id,
       day: dateOfDay,
@@ -44,6 +38,7 @@ class Vote extends Component {
     }
     console.log('userMood', userMood)
     await postMood(userMood)
+    this.props.history.push('/report')
   }
 
   render() {
@@ -55,17 +50,7 @@ class Vote extends Component {
         <div className="app-content">
           <p>{MOOD.question}</p>
           <Options onSelect={this.handleSelect} />
-          <div className="toast-content">
-            <Toast onClose={() => this.setState({showToast: false})} show={this.state.showToast} delay={1500} autohide>
-              <Toast.Header>
-                <strong className="mr-auto">{MOOD.toastHead}</strong>
-              </Toast.Header>
-              <Toast.Body>{MOOD.toastBody}</Toast.Body>
-            </Toast>
-          </div>
         </div>
-
-        
         
         <footer>
           <Link to="/report">Rapport</Link>
