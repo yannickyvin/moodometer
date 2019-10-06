@@ -27,11 +27,8 @@ body {
   justify-content: center;  
 }
 
-.toast-content {
-  margin: 24px 0;
-  display: flex;
-  justify-content: center;
-  color: black;
+.italic {
+  font-style: italic;
 }
 
 .btn-xl {

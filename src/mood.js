@@ -1,5 +1,6 @@
 export default {
   question: 'Comment se passe ta journée de travail ?',
+  defaultTeam: 'sushi',
   toastHead: 'Merci pour ton retour !',
   toastBody: `N'oublies pas de vérifier si tu es de Maki ;-)`,
   options: [

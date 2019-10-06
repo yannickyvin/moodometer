@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { Bar, Doughnut } from 'react-chartjs-2'
-import { getTodayMoods, getHistory } from '../moodClient'
+import { getTodayMoodsByTeam, getHistoryByTeam } from '../moodClient'
 import MOOD from '../mood'
+import queryString from 'query-string'
 
 const Today = ({ dayReport }) => (
   <Doughnut
@@ -53,6 +54,7 @@ class App extends Component {
   state = {
     dayReport: [],
     completeReport: [],
+    team: MOOD.defaultTeam
   }
 
   componentDidMount() {
@@ -61,11 +63,14 @@ class App extends Component {
   }
 
   refresh = async () => {
-    const todayMood = await getTodayMoods()
-    const history = await getHistory()
+    const props = queryString.parse(this.props.location.search);
+    const team = props.team === undefined ? MOOD.defaultTeam : props.team 
+
+    const todayMood = await getTodayMoodsByTeam(team)
+    const history = await getHistoryByTeam(team)
     const dayReport = this.createTodayReport(todayMood)
     const completeReport = this.createCompleteReport(history)
-    this.setState({ dayReport, completeReport })
+    this.setState({ dayReport, completeReport, team })
   }
 
   createTodayReport = (moods) => {
@@ -109,8 +114,9 @@ class App extends Component {
     return (
       <div className="app">
         <header>
-          <a href="https://github.com/yannickyvin/moodometer">sushimeter</a>
+          <a href="https://github.com/yannickyvin/moodometer">moodometer</a>
         </header>
+        <p className="font-weight-light text-muted italic">Equipe : {this.state.team}</p>
         <div className="app-content">
           <div>
             <Today dayReport={this.state.dayReport} />
@@ -121,7 +127,7 @@ class App extends Component {
           </div>
         </div>
         <footer>
-          <Link to="/vote">Home</Link>
+          <Link to={"/" + this.props.location.search}>Home</Link>
         </footer>
       </div>
     )

@@ -4,6 +4,7 @@ import { postMood } from '../moodClient'
 import MOOD from '../mood'
 import { dateOfDay } from '../service.js'
 import uniqid from 'uniqid'
+import queryString from 'query-string'
 
 let id
 
@@ -30,30 +31,40 @@ const Options = ({ onSelect }) => (
 
 class Vote extends Component {
 
+  state = {
+    team: MOOD.defaultTeam
+  }
+
+  componentDidMount = () => {
+    const parsed = queryString.parse(this.props.location.search);
+    this.setState({team : parsed.team === undefined ? MOOD.defaultTeam : parsed.team})
+  }
+
   handleSelect = async moodId => {
     const userMood = {
       session: id,
       day: dateOfDay(),
-      rate: moodId
+      rate: moodId,
+      team: this.state.team
     }
-    console.log('userMood', userMood)
     await postMood(userMood)
-    this.props.history.push('/report')
+    this.props.history.push(`/report${this.props.location.search}`)
   }
 
   render() {
     return (
       <div className="app">
         <header>
-          <a href="https://github.com/yannickyvin/moodometer">sushimeter</a>
+          <a href="https://github.com/yannickyvin/moodometer">moodometer</a>
         </header>
+        <p className="font-weight-light text-muted italic">Equipe : {this.state.team}</p>
         <div className="app-content">
           <p>{MOOD.question}</p>
           <Options onSelect={this.handleSelect} />
         </div>
         
         <footer>
-          <Link to="/report">Rapport</Link>
+          <Link to={"/report" + this.props.location.search}>Rapport</Link>
         </footer>
       </div>
     )

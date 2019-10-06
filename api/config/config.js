@@ -5,5 +5,6 @@ module.exports = {
   DB_USER:'',
   DB_PWD : '',
   DB_PORT : 5432,
+  DEFAULT_TEAM: 'sushi'
 }
 

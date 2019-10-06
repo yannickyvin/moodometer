@@ -1,9 +1,9 @@
 import {dateOfDay} from './service.js'
 const apiUrl = process.env.REACT_APP_API_URL
 
-export const getTodayMoods = async () => {
+export const getTodayMoodsByTeam = async (team) => {
   try {
-    const response = await fetch(`${apiUrl}/moods/?date=${dateOfDay()}`)
+    const response = await fetch(`${apiUrl}/moods/?date=${dateOfDay()}&team=${team}`)
     const content = await response.json()
     return content
   } catch (e) {
@@ -32,9 +32,20 @@ export const postMood = async mood => {
   }
 }
 
-export const getHistory = async () => {
+export const getAllHistory = async () => {
   try {
     const response = await fetch(`${apiUrl}/moods`)
+    const content = await response.json()
+    return content
+  } catch (e) {
+    console.log(e)
+    return null
+  }
+}
+
+export const getHistoryByTeam = async (team) => {
+  try {
+    const response = await fetch(`${apiUrl}/moods/?team=${team}`)
     const content = await response.json()
     return content
   } catch (e) {
