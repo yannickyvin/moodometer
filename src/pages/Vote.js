@@ -43,7 +43,7 @@ class Vote extends Component {
   handleSelect = async moodId => {
     const userMood = {
       session: id,
-      day: dateOfDay(),
+      day: dateOfDay('YYYY-MM-DD'),
       rate: moodId,
       team: this.state.team
     }

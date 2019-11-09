@@ -3,7 +3,7 @@ const apiUrl = process.env.REACT_APP_API_URL
 
 export const getTodayMoodsByTeam = async (team) => {
   try {
-    const response = await fetch(`${apiUrl}/moods/?date=${dateOfDay()}&team=${team}`)
+    const response = await fetch(`${apiUrl}/moods/?date=${dateOfDay('YYYY-MM-DD')}&team=${team}`)
     const content = await response.json()
     return content
   } catch (e) {

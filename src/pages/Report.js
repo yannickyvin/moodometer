@@ -4,6 +4,7 @@ import { Bar, Doughnut } from 'react-chartjs-2'
 import { getTodayMoodsByTeam, getHistoryByTeam } from '../moodClient'
 import MOOD from '../mood'
 import queryString from 'query-string'
+import {getWeek} from 'date-fns'
 
 const Today = ({ dayReport }) => (
   <Doughnut
@@ -20,7 +21,7 @@ const Today = ({ dayReport }) => (
   />
 )
 
-const Trend = ({ completeReport }) => {
+const TrendByDay = ({ completeReport }) => {
   if ((!completeReport) || (completeReport.length === 0))  return null
 
   const data = {
@@ -35,6 +36,8 @@ const Trend = ({ completeReport }) => {
     })),
   }
 
+  
+
   const options = {
     maintainAspectRatio: false,
     legend: false,
@@ -47,6 +50,42 @@ const Trend = ({ completeReport }) => {
     },
   }
 
+  
+
+  return <Bar data={data} options={options} height={200} />
+}
+
+const TrendByWeek = ({ weekReport }) => {
+  if ((!weekReport) || (weekReport.length === 0))  return null
+
+  console.log('weekReport', weekReport)
+
+  const data = {
+    labels: weekReport.map(m => ('S' + m[0])),
+    datasets: [{
+      label: 'Moyenne de la semaine',
+      backgroundColor: 'rgb(255, 99, 132)',
+      borderColor: 'rgb(255, 99, 132)',
+      data: weekReport.map(m => m[1].average)
+    }],  
+  }
+
+  
+
+  const options = {
+    maintainAspectRatio: false,
+    legend: false,
+    scales: {
+      yAxes: [
+        {
+          // stacked: true,
+        },
+      ],
+    },
+  }
+
+  
+
   return <Bar data={data} options={options} height={200} />
 }
 
@@ -54,6 +93,7 @@ class App extends Component {
   state = {
     dayReport: [],
     completeReport: [],
+    weekReport: [],
     team: MOOD.defaultTeam
   }
 
@@ -63,14 +103,15 @@ class App extends Component {
   }
 
   refresh = async () => {
-    const props = queryString.parse(this.props.location.search);
+    const props = queryString.parse(this.props.location.search)
     const team = props.team === undefined ? MOOD.defaultTeam : props.team 
 
     const todayMood = await getTodayMoodsByTeam(team)
     const history = await getHistoryByTeam(team)
     const dayReport = this.createTodayReport(todayMood)
     const completeReport = this.createCompleteReport(history)
-    this.setState({ dayReport, completeReport, team })
+    const weekReport = this.createWeekReport(history)
+    this.setState({ dayReport, completeReport, weekReport, team })
   }
 
   createTodayReport = (moods) => {
@@ -110,6 +151,29 @@ class App extends Component {
     return report
   }
 
+  createWeekReport = (moods) => {
+    let weekRate = new Map();
+
+    moods.forEach((mood) => {
+      
+      const date = new Date(mood.day)
+      const week = getWeek(date)
+      if (weekRate.size === 0 || !weekRate.has(week)) {
+        weekRate.set(week, {count: 1, average: mood.rate})
+      } else {
+        let {count, average} = weekRate.get(week)
+        average = (average*count + mood.rate) / (count + 1)
+        count++
+        weekRate.set(week, {count, average})
+      }
+    })
+
+    const arrayWeekRate = Array.from(weekRate)
+    arrayWeekRate.sort((a, b) => (a[0] - b[0]))
+
+    return arrayWeekRate
+  }
+
   render() {
     return (
       <div className="app">
@@ -123,7 +187,10 @@ class App extends Component {
           </div>
           <p className="font-weight-light text-muted">Aujourd'hui</p>
           <div className="h-50">
-            <Trend completeReport={this.state.completeReport} />
+            <TrendByDay completeReport={this.state.completeReport} />
+          </div>
+          <div className="h-50">
+            <TrendByWeek weekReport={this.state.weekReport} />
           </div>
         </div>
         <footer>
