@@ -80,7 +80,7 @@ class Report extends Component {
         weekRate.set(week, {count: 1, average: mood.rate})
       } else {
         let {count, average} = weekRate.get(week)
-        average = (average*count + mood.rate) / (count + 1)
+        average = ((average*count + mood.rate) / (count + 1)).toFixed(1)
         count++
         weekRate.set(week, {count, average})
       }
