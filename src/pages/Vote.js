@@ -5,6 +5,7 @@ import MOOD from '../mood'
 import { dateOfDay } from '../service.js'
 import uniqid from 'uniqid'
 import queryString from 'query-string'
+import Header from '../components/Header'
 
 let id
 
@@ -53,13 +54,11 @@ class Vote extends Component {
 
   render() {
     return (
-      <div className="app">
-        <header>
-          <a href="https://github.com/yannickyvin/moodometer">moodometer</a>
-        </header>
-        <p className="font-weight-light text-muted italic">Equipe : {this.state.team}</p>
-        <div className="app-content">
-          <p>{MOOD.question}</p>
+
+      <div className="app h-100 d-flex flex-column space-between align-items-center">
+        <Header team={this.state.team} />
+        <div className="app-content h-100">
+          <p className="text-center">{MOOD.question}</p>
           <Options onSelect={this.handleSelect} />
         </div>
         

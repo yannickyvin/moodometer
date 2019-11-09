@@ -1,8 +1,6 @@
 export default {
   question: 'Comment se passe ta journée de travail ?',
   defaultTeam: 'sushi',
-  toastHead: 'Merci pour ton retour !',
-  toastBody: `N'oublies pas de vérifier si tu es de Maki ;-)`,
   options: [
     { id: 'happy', label: 'Super',  color: '#3fdb36', img: 'happy.svg', rate: 5 },
     { id: 'smiling', label: 'Bien', color: '#b4db36', img: 'smiling.svg', rate: 4 },

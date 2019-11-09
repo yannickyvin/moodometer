@@ -10,6 +10,13 @@ const pool = new Pool({
   password: config.DB_PWD,
   port: config.DB_PORT,
 });
+console.log({
+  user: config.DB_USER,
+  host: config.DB_HOST,
+  database: config.DB_DATABASENAME,
+  password: config.DB_PWD,
+  port: config.DB_PORT,
+})
 
 module.exports = {
   getAllMoodsByTeam: (params) => {

@@ -1,10 +1,11 @@
+const dotenv = require('dotenv');
+dotenv.config();
 
 module.exports = {
-  DB_HOST : '127.0.0.1',
-  DB_DATABASENAME : 'mood',
-  DB_USER:'postgres',
-  DB_PWD : 'Delphine00',
-  DB_PORT : 5432,
-  DEFAULT_TEAM: 'sushi'
+  DB_HOST : process.env.DB_HOST,
+  DB_DATABASENAME : process.env.DB_DATABASENAME,
+  DB_USER : process.env.DB_USER,
+  DB_PWD : process.env.DB_PWD,
+  DB_PORT : process.env.DB_PORT,
+  DEFAULT_TEAM: process.env.DEFAULT_TEAM
 }
-

@@ -1,95 +1,13 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { Bar, Doughnut } from 'react-chartjs-2'
 import { getTodayMoodsByTeam, getHistoryByTeam } from '../moodClient'
+import {ReportToday, ReportTrendByDay, ReportTrendByWeek} from '../components/OpenChartReport'
 import MOOD from '../mood'
 import queryString from 'query-string'
 import {getWeek} from 'date-fns'
+import Header from '../components/Header'
 
-const Today = ({ dayReport }) => (
-  <Doughnut
-    options={{ maintainAspectRatio: false, legend: false, rotation: 1.57 }}
-    data={{
-      labels: dayReport.map(o => o.label),
-      datasets: [
-        {
-          data: dayReport.map(o => o.count),
-          backgroundColor: dayReport.map(o => o.color),
-        },
-      ],
-    }}
-  />
-)
-
-const TrendByDay = ({ completeReport }) => {
-  if ((!completeReport) || (completeReport.length === 0))  return null
-
-  const data = {
-    labels: completeReport[0].datas.map(m => m.day),
-    datasets: completeReport.map(o => ({
-      label: o.label,
-      type: 'line',
-      data: o.datas.map(c => (c.count)),
-      fill: false,
-      borderColor: o.color,
-      backgroundColor: o.color,
-    })),
-  }
-
-  
-
-  const options = {
-    maintainAspectRatio: false,
-    legend: false,
-    scales: {
-      yAxes: [
-        {
-          // stacked: true,
-        },
-      ],
-    },
-  }
-
-  
-
-  return <Bar data={data} options={options} height={200} />
-}
-
-const TrendByWeek = ({ weekReport }) => {
-  if ((!weekReport) || (weekReport.length === 0))  return null
-
-  console.log('weekReport', weekReport)
-
-  const data = {
-    labels: weekReport.map(m => ('S' + m[0])),
-    datasets: [{
-      label: 'Moyenne de la semaine',
-      backgroundColor: 'rgb(255, 99, 132)',
-      borderColor: 'rgb(255, 99, 132)',
-      data: weekReport.map(m => m[1].average)
-    }],  
-  }
-
-  
-
-  const options = {
-    maintainAspectRatio: false,
-    legend: false,
-    scales: {
-      yAxes: [
-        {
-          // stacked: true,
-        },
-      ],
-    },
-  }
-
-  
-
-  return <Bar data={data} options={options} height={200} />
-}
-
-class App extends Component {
+class Report extends Component {
   state = {
     dayReport: [],
     completeReport: [],
@@ -176,21 +94,20 @@ class App extends Component {
 
   render() {
     return (
-      <div className="app">
-        <header>
-          <a href="https://github.com/yannickyvin/moodometer">moodometer</a>
-        </header>
-        <p className="font-weight-light text-muted italic">Equipe : {this.state.team}</p>
-        <div className="app-content">
+      <div className="app d-flex flex-column space-between align-items-center h-200">
+        <Header team={this.state.team} />
+        <div className="app-content w-100">
+          <div className="h-20">
+            <ReportToday dayReport={this.state.dayReport} />
+          </div>
           <div>
-            <Today dayReport={this.state.dayReport} />
+            <p className="font-weight-light text-muted">Aujourd'hui</p>
           </div>
-          <p className="font-weight-light text-muted">Aujourd'hui</p>
-          <div className="h-50">
-            <TrendByDay completeReport={this.state.completeReport} />
+          <div className="h-20 w-100 my-2">
+            <ReportTrendByDay completeReport={this.state.completeReport} />
           </div>
-          <div className="h-50">
-            <TrendByWeek weekReport={this.state.weekReport} />
+          <div className="h-20 w-100 my-2">
+            <ReportTrendByWeek weekReport={this.state.weekReport} />
           </div>
         </div>
         <footer>
@@ -201,4 +118,4 @@ class App extends Component {
   }
 }
 
-export default App
+export default Report
