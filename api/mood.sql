@@ -4,6 +4,7 @@ CREATE TABLE mood (
   day date  NOT NULL,
   rate integer  NOT NULL,
   team text,
+  information text,
   CONSTRAINT session_day_team UNIQUE (session, day, team)
 );
 

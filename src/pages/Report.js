@@ -1,14 +1,15 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { getTodayMoodsByTeam, getHistoryByTeam } from '../moodClient'
-import {ReportToday, ReportTrendByDay, ReportTrendByWeek} from '../components/OpenChartReport'
-import MOOD from '../mood'
+import {ReportToday, ReportTrendByDay, ReportTrendByWeek, BadgesInformation} from '../components/OpenChartReport'
+import {MOOD, LABELS, IS_ACTIVATED} from '../config/config'
 import queryString from 'query-string'
 import {getWeek} from 'date-fns'
 import Header from '../components/Header'
 
 class Report extends Component {
   state = {
+    todayMood: [],
     dayReport: [],
     completeReport: [],
     weekReport: [],
@@ -29,7 +30,7 @@ class Report extends Component {
     const dayReport = this.createTodayReport(todayMood)
     const completeReport = this.createCompleteReport(history)
     const weekReport = this.createWeekReport(history)
-    this.setState({ dayReport, completeReport, weekReport, team })
+    this.setState({ todayMood, dayReport, completeReport, weekReport, team })
   }
 
   createTodayReport = (moods) => {
@@ -101,14 +102,23 @@ class Report extends Component {
             <ReportToday dayReport={this.state.dayReport} />
           </div>
           <div>
-            <p className="font-weight-light text-muted">Aujourd'hui</p>
+            <BadgesInformation todayMood={this.state.todayMood}/>
           </div>
-          <div className="h-20 w-100 my-2">
-            <ReportTrendByDay completeReport={this.state.completeReport} />
+          <div>
+            <p className="font-weight-light text-muted">{LABELS.today}</p>
           </div>
-          <div className="h-20 w-100 my-2">
-            <ReportTrendByWeek weekReport={this.state.weekReport} />
-          </div>
+          {
+            IS_ACTIVATED.reportByDay &&
+            (<div className="h-20 w-100 my-2">
+              <ReportTrendByDay completeReport={this.state.completeReport} />
+            </div>)
+          }
+          {
+            IS_ACTIVATED.reportByWeek &&
+            (<div className="h-20 w-100 my-2">
+                <ReportTrendByWeek weekReport={this.state.weekReport} />
+            </div>)
+          }
         </div>
         <footer>
           <Link to={"/" + this.props.location.search}>Home</Link>

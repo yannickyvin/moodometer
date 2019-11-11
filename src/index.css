@@ -34,3 +34,34 @@ body {
 .emoji {
   width: 100px;
 }
+
+.inputmood {
+  width: 150px;
+  height: 30px;
+  display: inline-block;
+  font-size: 0.4em;
+}
+
+.badgemood {
+  border: solid;
+  border-radius: 20px;
+  font-size: 0.6em;
+  background-color: red;
+  padding: 0 6px;
+}
+
+.small {
+  font-size: 0.4em;
+  width: 300px;
+}
+
+.arrow {
+  height: 30px;
+} 
+
+.form {
+  background-color: rgb(238, 238, 238);
+  border-radius: 20px;
+  border: solid;
+  border-color: black;
+}

@@ -20,15 +20,15 @@ console.log({
 
 module.exports = {
   getAllMoodsByTeam: (params) => {
-    const text = "select session, TO_CHAR(day, 'YYYY-MM-DD') as day, rate, team from mood where team=$1 order by mood.day";
+    const text = "select session, TO_CHAR(day, 'YYYY-MM-DD') as day, rate, team, information from mood where team=$1 order by mood.day";
     return pool.query(text, params);
   },
   getMoodsByDateAndTeam: (params) => {
-    const text = "select session, TO_CHAR(day, 'YYYY-MM-DD') as day, rate, team from mood where team=$2 and day=TO_DATE($1, 'YYYY-MM-DD')";
+    const text = "select session, TO_CHAR(day, 'YYYY-MM-DD') as day, rate, team, information from mood where team=$2 and day=TO_DATE($1, 'YYYY-MM-DD')";
     return pool.query(text, params);
   },
   insertMood: (params) => {
-    const text = "insert into mood (session, day, rate, team) values ($1, TO_DATE($2, 'YYYY-MM-DD'), $3, $4) on conflict on constraint session_day_team do update set rate=$3";
+    const text = "insert into mood (session, day, rate, team, information) values ($1, TO_DATE($2, 'YYYY-MM-DD'), $3, $4, $5) on conflict on constraint session_day_team do update set rate=$3, information=$5";
     return pool.query(text, params);
   }
 };

@@ -1,5 +1,6 @@
 import React from 'react'
 import { Bar, Doughnut } from 'react-chartjs-2'
+import { MOOD } from '../config/config.js'
 
 
 export const ReportToday = ({ dayReport }) => (
@@ -16,6 +17,19 @@ export const ReportToday = ({ dayReport }) => (
     }}
   />
 )
+
+export const BadgesInformation = ({ todayMood }) => {
+  const BadgeInformation = ({ information, color }) => (<span className="badgemood mx-1" style={{backgroundColor : color}}>{information}</span>)
+  const getColorFromRate = (rate) => MOOD.options.find((x) => x.rate === rate).color
+  
+  return(
+    <div className="d-flex flex-row flex-wrap my-3">
+      {todayMood.map((x) => {
+        return (x.information !== undefined && x.information !== null && x.information.length > 0 && <BadgeInformation information={x.information} color={getColorFromRate(x.rate)}/>)
+      })}
+    </div>
+  )
+}
 
 export const ReportTrendByDay = ({ completeReport }) => {
   if ((!completeReport) || (completeReport.length === 0))  return null

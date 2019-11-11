@@ -14,7 +14,6 @@ export const getTodayMoodsByTeam = async (team) => {
 
 export const postMood = async mood => {
   try {
-    console.log('Posting mood', JSON.stringify(mood))
     const response = await fetch(`${apiUrl}/moods/`, {
       method: 'POST',
       mode: 'cors',
@@ -24,7 +23,6 @@ export const postMood = async mood => {
       })
     })
     const updatedMood = await response.json()
-    console.log('Updated mood', updatedMood)
     return updatedMood
   } catch (e) {
     console.log(e)

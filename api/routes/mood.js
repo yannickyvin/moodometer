@@ -25,10 +25,11 @@ router.post('/', async function(req, res) {
   const session = req.body.session;
   const day = req.body.day;
   const rate = req.body.rate;
+  const information = req.body.information
   const team = (req.body.team === undefined ||  req.body.team === 'undefined') ? config.DEFAULT_TEAM : req.body.team;
-  console.log("params", session, day, rate, team);
+  console.log("params", session, day, rate, team, information);
   try {
-    await db.insertMood([session, day, rate, team]);
+    await db.insertMood([session, day, rate, team, information]);
     res.status(201).jsonp({success : ' créé'});
   } catch (e) {
     console.error(e);
