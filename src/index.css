@@ -40,6 +40,12 @@ body {
   height: 30px;
   display: inline-block;
   font-size: 0.4em;
+  box-sizing: content-box;
+  border: 1;
+}
+
+.inputmood:hover {
+  background-color: #EEEEEE;
 }
 
 .badgemood {

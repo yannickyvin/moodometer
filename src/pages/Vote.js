@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { postMood } from '../moodClient'
 import { MOOD, LABELS, IS_ACTIVATED } from '../config/config'
@@ -24,13 +24,27 @@ const Options = ({ onSelect }) => (
         className={`btn btn-xl m-2`}
         onClick={() => onSelect(o.rate)}
       >
-        <img className={`emoji`} src={o.img}/>
+        <img className={`emoji`} src={o.img} alt={o.img} />
       </button>
     ))}
   </div>
 )
 
-const InputFormMood = (props) => {
+const InputFormMood = ({onInputChange}) => {
+  const [backgroundInput, setBackgroundInput]   = useState('#fff')
+  const [border, setBorder]   = useState('1')
+
+  const handleChangeInput = (event) => {
+    if (event.target.value.length > 2) {
+      setBackgroundInput('#eee')
+      setBorder('0')
+    } else {
+      setBackgroundInput('#fff')
+      setBorder('1')
+    }
+    onInputChange(event)
+  }
+
   return (
     <>
       <div className="form-group my-4">
@@ -39,7 +53,7 @@ const InputFormMood = (props) => {
             <u>{LABELS.informationUnderline}</u>{LABELS.informationNext}
           </span>
           <img src="right-arrow.svg" className="arrow mx-1" alt="arrow" />
-          <input className="inputmood mx-2 px-3" aria-describedby="wordhelp" onChange={props.onInputChange}/>
+          <input className="inputmood mx-2 px-3" aria-describedby="wordhelp" onChange={handleChangeInput} style={{backgroundColor: backgroundInput, border: border}} />
         </div>
       </div>
     </>

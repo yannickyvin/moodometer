@@ -13,11 +13,15 @@ export const LABELS = {
   question: 'Comment se passe ta journée de travail ?',
   informationUnderline: 'Avant de voter',
   informationNext: ', tu peux ajouter ici un mot en rapport avec ton humeur (évènement, tâche, difficulté...)',
-  today: 'Aujourd\'hui'
+  today: 'Aujourd\'hui',
+  trendByDayReport: 'Votes sur les 3 dernières semaines',
+  trendByWeekReport: 'Moyenne des votes par semaine',
+  lastInformationReport: 'Commentaires sur les 3 dernières semaines'
 }
 
 export const IS_ACTIVATED = {
+  information: true,
   reportByDay: true,
   reportByWeek: true,
-  information: true
+  reportLastInformations: true
 }

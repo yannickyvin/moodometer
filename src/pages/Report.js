@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { getTodayMoodsByTeam, getHistoryByTeam } from '../moodClient'
-import {ReportToday, ReportTrendByDay, ReportTrendByWeek, BadgesInformation} from '../components/OpenChartReport'
+import {ReportToday, ReportTrendByDay, ReportTrendByWeek, DailyInformations, LastInformations} from '../components/OpenChartReport'
 import {MOOD, LABELS, IS_ACTIVATED} from '../config/config'
 import queryString from 'query-string'
 import {getWeek} from 'date-fns'
@@ -10,6 +10,7 @@ import Header from '../components/Header'
 class Report extends Component {
   state = {
     todayMood: [],
+    historyMood: [],
     dayReport: [],
     completeReport: [],
     weekReport: [],
@@ -26,11 +27,11 @@ class Report extends Component {
     const team = props.team === undefined ? MOOD.defaultTeam : props.team 
 
     const todayMood = await getTodayMoodsByTeam(team)
-    const history = await getHistoryByTeam(team)
+    const historyMood = await getHistoryByTeam(team)
     const dayReport = this.createTodayReport(todayMood)
-    const completeReport = this.createCompleteReport(history)
-    const weekReport = this.createWeekReport(history)
-    this.setState({ todayMood, dayReport, completeReport, weekReport, team })
+    const completeReport = this.createCompleteReport(historyMood)
+    const weekReport = this.createWeekReport(historyMood)
+    this.setState({ todayMood, historyMood, dayReport, completeReport, weekReport, team })
   }
 
   createTodayReport = (moods) => {
@@ -102,22 +103,43 @@ class Report extends Component {
             <ReportToday dayReport={this.state.dayReport} />
           </div>
           <div>
-            <BadgesInformation todayMood={this.state.todayMood}/>
+            <DailyInformations todayMood={this.state.todayMood}/>
           </div>
           <div>
             <p className="font-weight-light text-muted">{LABELS.today}</p>
           </div>
           {
             IS_ACTIVATED.reportByDay &&
-            (<div className="h-20 w-100 my-2">
+            (<>
+            <div className="h-20 w-100 my-2">
               <ReportTrendByDay completeReport={this.state.completeReport} />
-            </div>)
+            </div>
+            <div className="d-flex justify-content-center">
+            <p className="font-weight-light text-muted">{LABELS.trendByDayReport}</p>
+            </div>
+            </>)
           }
           {
             IS_ACTIVATED.reportByWeek &&
-            (<div className="h-20 w-100 my-2">
+            (<>
+            <div className="h-20 w-100 my-2">
                 <ReportTrendByWeek weekReport={this.state.weekReport} />
-            </div>)
+            </div>
+            <div className="d-flex justify-content-center">
+              <p className="font-weight-light text-muted">{LABELS.trendByWeekReport}</p>
+            </div>
+            </>)
+          }
+          {
+            IS_ACTIVATED.reportLastInformations &&
+            (<>
+            <div className="h-20 w-100 my-2">
+                <LastInformations historyMood={this.state.historyMood} />
+            </div>
+            <div className="d-flex justify-content-center">
+              <p className="font-weight-light text-muted">{LABELS.lastInformationReport}</p>
+            </div>
+            </>)
           }
         </div>
         <footer>

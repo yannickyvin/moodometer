@@ -17,6 +17,8 @@
     "uniqid": "^5.0.3"
   },
   "devDependencies": {
+    "eslint-config-standard": "^14.1.0",
+    "eslint-plugin-react": "^7.16.0",
     "gh-pages": "^2.0.1"
   },
   "scripts": {
@@ -28,7 +30,11 @@
     "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": [
+      "eslint:recommended",
+      "plugin:react/recommended",
+      "standard"
+    ]
   },
   "browserslist": [
     ">0.2%",

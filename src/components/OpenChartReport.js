@@ -18,14 +18,34 @@ export const ReportToday = ({ dayReport }) => (
   />
 )
 
-export const BadgesInformation = ({ todayMood }) => {
-  const BadgeInformation = ({ information, color }) => (<span className="badgemood mx-1" style={{backgroundColor : color}}>{information}</span>)
-  const getColorFromRate = (rate) => MOOD.options.find((x) => x.rate === rate).color
+const Information = ({ information, color }) => (<span className="badgemood mx-1" style={{backgroundColor : color}}>{information}</span>)
+
+const getColorFromRate = (rate) => MOOD.options.find((x) => x.rate === rate).color
+
+export const DailyInformations = ({ todayMood }) => {
   
   return(
     <div className="d-flex flex-row flex-wrap my-3">
       {todayMood.map((x) => {
-        return (x.information !== undefined && x.information !== null && x.information.length > 0 && <BadgeInformation information={x.information} color={getColorFromRate(x.rate)}/>)
+        return (x.information !== undefined && x.information !== null && x.information.length > 0 
+          && <Information key={x.session} information={x.information} color={getColorFromRate(x.rate)}/>)
+      })}
+    </div>
+  )
+}
+
+export const LastInformations = ({ historyMood }) => {
+  return(
+    <div className="d-flex flex-column flex-wrap my-3">
+      {MOOD.options.map((option) => {
+        return(
+          <div className="d-flex flex-row flex-wrap my-1">
+            {historyMood.map((x) => {
+              return (x.information !== undefined && x.information !== null && x.information.length > 0 && x.rate === option.rate 
+                && <Information key={x.session + x.day} information={x.information} color={getColorFromRate(x.rate)}/>)
+            })}
+          </div>
+        )
       })}
     </div>
   )
