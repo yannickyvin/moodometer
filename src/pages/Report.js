@@ -96,56 +96,62 @@ class Report extends Component {
 
   render() {
     return (
-      <div className="app d-flex flex-column space-between align-items-center h-200">
-        <Header team={this.state.team} />
-        <div className="app-content w-100">
-          <div className="h-20">
-            <ReportToday dayReport={this.state.dayReport} />
+      <div className="cont w-100 d-flex justify-content-center">
+      
+        <div className="app d-flex flex-column space-between align-items-center h-200">
+          <Header team={this.state.team} />
+          <div className="app-content w-100">
+            <div className="h-20">
+              <ReportToday dayReport={this.state.dayReport} />
+            </div>
+            <div>
+              <DailyInformations todayMood={this.state.todayMood}/>
+            </div>
+            <div>
+              <p className="font-weight-light">{LABELS.today}</p>
+            </div>
+            {
+              IS_ACTIVATED.reportByDay &&
+              (<>
+              <div className="h-20 w-100 my-2">
+                <ReportTrendByDay completeReport={this.state.completeReport} />
+              </div>
+              <div className="d-flex justify-content-center">
+              <p className="font-weight-light">{LABELS.trendByDayReport}</p>
+              </div>
+              </>)
+            }
+            {
+              IS_ACTIVATED.reportByWeek &&
+              (<>
+              <div className="h-20 w-100 my-2">
+                  <ReportTrendByWeek weekReport={this.state.weekReport} />
+              </div>
+              <div className="d-flex justify-content-center">
+                <p className="font-weight-light">{LABELS.trendByWeekReport}</p>
+              </div>
+              </>)
+            }
+            {
+              IS_ACTIVATED.reportLastInformations &&
+              (<>
+              <div className="h-20 w-100 my-2">
+                  <LastInformations historyMood={this.state.historyMood} />
+              </div>
+              <div className="d-flex justify-content-center">
+                <p className="font-weight-light">{LABELS.lastInformationReport}</p>
+              </div>
+              </>)
+            }
           </div>
-          <div>
-            <DailyInformations todayMood={this.state.todayMood}/>
-          </div>
-          <div>
-            <p className="font-weight-light text-muted">{LABELS.today}</p>
-          </div>
-          {
-            IS_ACTIVATED.reportByDay &&
-            (<>
-            <div className="h-20 w-100 my-2">
-              <ReportTrendByDay completeReport={this.state.completeReport} />
-            </div>
-            <div className="d-flex justify-content-center">
-            <p className="font-weight-light text-muted">{LABELS.trendByDayReport}</p>
-            </div>
-            </>)
-          }
-          {
-            IS_ACTIVATED.reportByWeek &&
-            (<>
-            <div className="h-20 w-100 my-2">
-                <ReportTrendByWeek weekReport={this.state.weekReport} />
-            </div>
-            <div className="d-flex justify-content-center">
-              <p className="font-weight-light text-muted">{LABELS.trendByWeekReport}</p>
-            </div>
-            </>)
-          }
-          {
-            IS_ACTIVATED.reportLastInformations &&
-            (<>
-            <div className="h-20 w-100 my-2">
-                <LastInformations historyMood={this.state.historyMood} />
-            </div>
-            <div className="d-flex justify-content-center">
-              <p className="font-weight-light text-muted">{LABELS.lastInformationReport}</p>
-            </div>
-            </>)
-          }
+          <footer className="footer">
+            <Link to={"/" + this.props.location.search}>Home</Link>
+          </footer>
         </div>
-        <footer>
-          <Link to={"/" + this.props.location.search}>Home</Link>
-        </footer>
+      
       </div>
+
+      
     )
   }
 }

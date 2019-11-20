@@ -9,11 +9,24 @@ body {
   padding: 0;
 }
 
+.header, .footer {
+  color: rgb(211, 247, 255);
+}
+
+.cont {
+  background-image: url('./images/fab2.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
 .app {
-  background-color: #282c34;
+  background: rgba(104, 104, 104, 0.7);
+  background: linear-gradient(to right, rgba(255, 255, 255, 0.1),  rgba(104, 104, 104, 0.7),  rgba(104, 104, 104, 0.8) 50%, rgba(104, 104, 104, 0.7), rgba(255, 255, 255, 0.1));
+
   font-size: calc(14px + 3vmin);
   color: white;
   padding-bottom: 10px;
+  width: 80%;
 }
 
 .app-content {

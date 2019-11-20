@@ -51,6 +51,31 @@ export const LastInformations = ({ historyMood }) => {
   )
 }
 
+const optionsBar = {
+  maintainAspectRatio: false,
+  legend: false,
+  scales: {
+    xAxes: [{
+      display: true,
+      gridLines: {
+        color: 'rgb(255, 255, 255, 0.2)'
+      },
+      ticks: {
+        fontColor: "white",
+      }
+    }],
+    yAxes: [{
+      display: true,
+      gridLines: {
+        color: 'rgb(255, 255, 255, 0.2)'
+      },
+      ticks: {
+        fontColor: "white",
+      }
+    }]
+  }
+}
+
 export const ReportTrendByDay = ({ completeReport }) => {
   if ((!completeReport) || (completeReport.length === 0))  return null
 
@@ -66,12 +91,7 @@ export const ReportTrendByDay = ({ completeReport }) => {
     })),
   }
 
-  const options = {
-    maintainAspectRatio: false,
-    legend: false
-  }
-
-  return <Bar data={data} options={options} height={200} />
+  return <Bar data={data} options={optionsBar} height={200} />
 }
 
 export const ReportTrendByWeek = ({ weekReport }) => {
@@ -87,10 +107,5 @@ export const ReportTrendByWeek = ({ weekReport }) => {
     }],  
   }
 
-  const options = {
-    maintainAspectRatio: false,
-    legend: false
-  }
-
-  return <Bar data={data} options={options} height={200} />
+  return <Bar data={data} options={optionsBar} height={200} />
 }

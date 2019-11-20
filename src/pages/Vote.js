@@ -91,18 +91,22 @@ class Vote extends Component {
   render() {
     return (
 
-      <div className="app h-100 d-flex flex-column space-between align-items-center">
-        <Header team={this.state.team} />
-        <div className="app-content h-100">
-          <p className="text-center">{LABELS.question}</p>
-          <Options onSelect={this.handleSelect} />
-          {IS_ACTIVATED.information && <InputFormMood onInputChange={this.informationUpdate}/>}
+      <div className="cont w-100 h-100 d-flex justify-content-center">
+        <div className="app h-100 d-flex flex-column space-between align-items-center">
+          <Header team={this.state.team} />
+          <div className="app-content h-100">
+            <p className="text-center">{LABELS.question}</p>
+            <Options onSelect={this.handleSelect} />
+            {IS_ACTIVATED.information && <InputFormMood onInputChange={this.informationUpdate}/>}
+          </div>
+          
+          <footer className="footer">
+            <Link to={"/report" + this.props.location.search}>Rapport</Link>
+          </footer>
         </div>
-        
-        <footer>
-          <Link to={"/report" + this.props.location.search}>Rapport</Link>
-        </footer>
+
       </div>
+      
     )
   }
 }
