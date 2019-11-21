@@ -17,6 +17,7 @@ body {
   background-image: url('./images/fab2.jpg');
   background-repeat: no-repeat;
   background-size: cover;
+  background-attachment: fixed;
 }
 
 .app {

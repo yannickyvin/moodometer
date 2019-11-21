@@ -1,11 +1,11 @@
 import React, { Component, useState } from 'react'
-import { Link } from 'react-router-dom'
 import { postMood } from '../moodClient'
 import { MOOD, LABELS, IS_ACTIVATED } from '../config/config'
 import { dateOfDay } from '../service'
 import uniqid from 'uniqid'
 import queryString from 'query-string'
 import Header from '../components/Header'
+import Footer from '../components/Footer'
 
 let id
 
@@ -94,17 +94,15 @@ class Vote extends Component {
       <div className="cont w-100 h-100 d-flex justify-content-center">
         <div className="app h-100 d-flex flex-column space-between align-items-center">
           <Header team={this.state.team} />
+          
           <div className="app-content h-100">
             <p className="text-center">{LABELS.question}</p>
             <Options onSelect={this.handleSelect} />
             {IS_ACTIVATED.information && <InputFormMood onInputChange={this.informationUpdate}/>}
           </div>
-          
-          <footer className="footer">
-            <Link to={"/report" + this.props.location.search}>Rapport</Link>
-          </footer>
-        </div>
 
+          <Footer link="/report" libelle="Rapport" search={this.props.location.search} />
+        </div>
       </div>
       
     )

@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
 import { getTodayMoodsByTeam, getHistoryByTeam } from '../moodClient'
 import {ReportToday, ReportTrendByDay, ReportTrendByWeek, DailyInformations, LastInformations} from '../components/OpenChartReport'
 import {MOOD, LABELS, IS_ACTIVATED} from '../config/config'
 import queryString from 'query-string'
 import {getWeek} from 'date-fns'
 import Header from '../components/Header'
+import Footer from '../components/Footer'
 
 class Report extends Component {
   state = {
@@ -144,14 +144,12 @@ class Report extends Component {
               </>)
             }
           </div>
-          <footer className="footer">
-            <Link to={"/" + this.props.location.search}>Home</Link>
-          </footer>
+          
+          <Footer link="/" libelle="Home" search={this.props.location.search} />
+
         </div>
       
       </div>
-
-      
     )
   }
 }
