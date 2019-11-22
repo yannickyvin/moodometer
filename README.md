@@ -15,39 +15,53 @@ Differences between this moodmeter and original project :
 * postgreSQL (>= 11) https://www.postgresql.org/download/ (dev & prod)
 * nodeJS (>= 10) https://nodejs.org/en/download/ (dev & prod)
 * nginx http://nginx.org/en/download.html (prod only)
+* pm2 https://www.npmjs.com/package/pm2 (prod only)
 
 /!\ Using navigator local storage (recording an uniq id) => in production environnement https domain is necessary for a functionnal app. 
 You can install a free let's encrypt certificate : https://letsencrypt.org/
 
-## Get Moodometer Sources
-git clone https://github.com/yannickyvin/moodometer.git
-or
+## Get Moodometer Sources & install API & front APP
+```bash
 git clone git@github.com:yannickyvin/moodometer.git
+cd ~/moodometer
+npm install
+cd ~/moodometer/api
+npm install
+```
 
 ## Install MoodDB and create mood table
 1 - Create mood Database on postgreSQL with user/pwd of your choice
 
-2 - Create mood table from sql script : ./api/mood.sql
+2 - Create mood table from sql script : ~/api/mood.sql
 
 ## Set API & Front Configuration 
 
 ### API Configuration
-1 - create ./api/.env file and add this content (replace values in italic) :
+1 - create ./api/.env file and add this content (replace values when necessary) :
 ```
-NODE_ENV=*development*
-DB_HOST=*hostname*
-DB_DATABASENAME=*mood*
-DB_USER=*user*
-DB_PWD=*pwd*
-DB_PORT=*5432*
-DEFAULT_TEAM=*name of default team (aka team displayed on / url)*
+# environment (development or production)
+NODE_ENV=development
+# IP Host of your PostgreSQL instance database - 127.0.0.1 if your database is on same server 
+DB_HOST=127.0.0.1
+# Name of your PostgreSQL instance database
+DB_DATABASENAME=mood
+# Name of your PostgreSQL user database
+DB_USER=user
+# Pwd of your PostgreSQL user database
+DB_PWD=pwd
+# Port of your PostgreSQL database (5432 by default)
+DB_PORT=5432
+# Name of default team (team on / url)
+DEFAULT_TEAM=default
 ```
 
 ### Front configuration - PROD ENVIRONMENT
 2a - create ~/.env.production file for production environment and add this content :
 ```
-PUBLIC_URL="*/mood*"
-REACT_APP_API_URL="*https://domain.name*"
+# Url directory of your front app
+PUBLIC_URL="/mood"
+# Your domain name
+REACT_APP_API_URL="https://domain.name"
 
 ```
 ### Front configuration - DEV ENVIRONMENT
@@ -59,44 +73,40 @@ REACT_APP_API_URL="http://localhost:8400"
 ```
 
 
-## Install Front App and Run
+## Run API & Front App
 ### Dev
-1 - API Installation & Run
+1 - API Run
 ```bash
 cd ~/moodmeter/api/
-npm install
 npm run dev
 ```
 
 2 - Front Installation & Run
 ```bash
 cd ~/moodmeter
-npm install
 npm run start
 ```
 
-### PROD
-1 - pm2 install.
-```bash
-npm install pm2 -g
-```
-Cf https://www.npmjs.com/package/pm2
+3 - Moodmeter App is alive on http://localhost:3000
 
-2 - API run with pm2
+### PROD
+1 - API run with pm2
 ```bash
 cd ~/moodmeter/api/
 pm2 start server.js
 ```
 
-3 - Front build
+2 - Front build
 ```bash
 cd ~/moodmeter/
 npm run build
 ```
 
-4 - Configure Nginx and restart nginx. Simple configuration example :
+3 - Configure Nginx for accessing to front built static files and restart nginx. Simple configuration entry example :
 ```nginx
   location / {
           alias /home/johndoe/moodometer/build;
   }
 ```
+
+4 - Moodmeter App is alive on http://*domainName*/mood
