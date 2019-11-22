@@ -4,8 +4,8 @@ const Header = (props) => {
   return(
     <>
       <header>
-            <a className="header" href="https://github.com/yannickyvin/moodometer">moodometer</a>
-          </header>
+        <a className="header" href="https://github.com/yannickyvin/moodometer">moodometer</a>
+      </header>
       <p className="font-weight italic">Equipe : {props.team}</p>
     </>
   )

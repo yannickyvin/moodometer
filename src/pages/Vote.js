@@ -17,11 +17,11 @@ if (window.localStorage.getItem('id') === null ) {
 }
 
 const Options = ({ onSelect }) => (
-  <div>
+  <div className="d-flex justify-content-center align-items-center">
     {MOOD.options.map(o => (
       <button
         key={o.rate}
-        className={`btn btn-xl m-2`}
+        className={`btn btn-xl`}
         onClick={() => onSelect(o.rate)}
       >
         <img className={`emoji`} src={o.img} alt={o.img} />
@@ -91,11 +91,10 @@ class Vote extends Component {
   render() {
     return (
 
-      <div className="cont w-100 h-100 d-flex justify-content-center">
+      <div className="cont h-100 w-100 d-flex justify-content-center">
         <div className="app h-100 d-flex flex-column space-between align-items-center">
           <Header team={this.state.team} />
-          
-          <div className="app-content h-100">
+          <div className="d-flex flex-column justify-content-center align-items-center h-100">
             <p className="text-center">{LABELS.question}</p>
             <Options onSelect={this.handleSelect} />
             {IS_ACTIVATED.information && <InputFormMood onInputChange={this.informationUpdate}/>}
