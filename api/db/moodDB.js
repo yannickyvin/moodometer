@@ -19,12 +19,16 @@ console.log({
 })
 
 module.exports = {
+  getMoodsByTeamAndMaxWeeks: (params, maxWeeks) => {
+    const text = `select session, TO_CHAR(day, 'YYYY-MM-DD') as day, rate, team, information from mood where team=$1 and day > (now() - interval '${maxWeeks} week') order by mood.day`;
+    return pool.query(text, params);
+  },
   getAllMoodsByTeam: (params) => {
     const text = "select session, TO_CHAR(day, 'YYYY-MM-DD') as day, rate, team, information from mood where team=$1 order by mood.day";
     return pool.query(text, params);
   },
-  getMoodsByDateAndTeam: (params) => {
-    const text = "select session, TO_CHAR(day, 'YYYY-MM-DD') as day, rate, team, information from mood where team=$2 and day=TO_DATE($1, 'YYYY-MM-DD')";
+  getMoodsByTeamAndDay: (params) => {
+    const text = "select session, TO_CHAR(day, 'YYYY-MM-DD') as day, rate, team, information from mood where team=$1 and day=TO_DATE($2, 'YYYY-MM-DD')";
     return pool.query(text, params);
   },
   insertMood: (params) => {

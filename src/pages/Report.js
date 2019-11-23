@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import { getTodayMoodsByTeam, getHistoryByTeam } from '../moodClient'
+import { getTodayMoodsByTeam, getHistoryMoodsByTeam } from '../moodClient'
 import {ReportContainer, ReportToday, ReportTrendByDay, ReportTrendByWeek, DailyInformations, LastInformations} from '../components/ChartReport'
-import {MOOD, LABELS, IS_ACTIVATED} from '../config/config'
+import {MOOD, REPORT_MAX_WEEKS, LABELS, IS_ACTIVATED} from '../config/config'
 import queryString from 'query-string'
 import {getWeek} from 'date-fns'
 import Header from '../components/Header'
@@ -9,9 +9,9 @@ import Footer from '../components/Footer'
 
 class Report extends Component {
   state = {
-    todayMood: [],
-    historyMood: [],
-    dayReport: [],
+    todayMoods: [],
+    todayReport: [],
+    historyLastWeeksMoods: [],
     completeReport: [],
     weekReport: [],
     team: MOOD.defaultTeam
@@ -26,26 +26,28 @@ class Report extends Component {
     const props = queryString.parse(this.props.location.search)
     const team = props.team === undefined ? MOOD.defaultTeam : props.team 
 
-    const todayMood = await getTodayMoodsByTeam(team)
-    const historyMood = await getHistoryByTeam(team)
-    const dayReport = this.createTodayReport(todayMood)
-    const completeReport = this.createCompleteReport(historyMood)
-    const weekReport = this.createWeekReport(historyMood)
+    const todayMoods = await getTodayMoodsByTeam(team)
+    const historyLastWeeksMoods = await getHistoryMoodsByTeam({team, maxWeeks: REPORT_MAX_WEEKS})
+    const historyAllMoods = await getHistoryMoodsByTeam({team})
 
-    this.setState({ todayMood, historyMood, dayReport, completeReport, weekReport, team })
+    const todayReport = this.createTodayReport(todayMoods)
+    const completeReport = this.createCompleteReport(historyLastWeeksMoods)
+    const weekReport = this.createWeekReport(historyAllMoods)
+
+    this.setState({ todayMoods, historyLastWeeksMoods, todayReport, completeReport, weekReport, team })
   }
 
   createTodayReport = (moods) => {
-    let dayReport = [...MOOD.options]
+    let todayReport = [...MOOD.options]
 
-    dayReport = dayReport.map((option) => ({...option, count: 0}))
+    todayReport = todayReport.map((option) => ({...option, count: 0}))
     if (moods !== null && moods.length !== undefined) {
       moods.forEach((mood) => {
-        const rateOptionFound = dayReport.find(elt => elt.rate === mood.rate)
+        const rateOptionFound = todayReport.find(elt => elt.rate === mood.rate)
         rateOptionFound.count++
       })
     }
-    return dayReport
+    return todayReport
   }
   
   createCompleteReport = (moods) => {
@@ -101,24 +103,24 @@ class Report extends Component {
           <Header team={this.state.team} />
           <div className="d-flex flex-column justify-content-center align-items-center w-100">
             <div className="h-20">
-              <ReportToday dayReport={this.state.dayReport} />
+              <ReportToday reportDatas={this.state.todayReport} />
             </div>
             <div>
-              <DailyInformations todayMood={this.state.todayMood}/>
+              <DailyInformations moods={this.state.todayMoods}/>
             </div>
             <div>
               <p className="font-weight-light">{LABELS.today}</p>
             </div>
             <ReportContainer activate={IS_ACTIVATED.reportByDay} label={LABELS.trendByDayReport}>
-              <ReportTrendByDay completeReport={this.state.completeReport} />
+              <ReportTrendByDay reportDatas={this.state.completeReport} />
             </ReportContainer>
 
             <ReportContainer activate={IS_ACTIVATED.reportByWeek} label={LABELS.trendByWeekReport}>
-              <ReportTrendByWeek weekReport={this.state.weekReport} />
+              <ReportTrendByWeek reportDatas={this.state.weekReport} />
             </ReportContainer>
 
             <ReportContainer activate={IS_ACTIVATED.reportLastInformations} label={LABELS.lastInformationReport}>
-              <LastInformations historyMood={this.state.historyMood} />
+              <LastInformations moods={this.state.historyLastWeeksMoods} />
             </ReportContainer>
           </div>
           

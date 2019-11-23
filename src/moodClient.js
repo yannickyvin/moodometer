@@ -12,6 +12,33 @@ export const getTodayMoodsByTeam = async (team) => {
   }
 }
 
+export const getAllMoods = async () => {
+  try {
+    const response = await fetch(`${apiUrl}/moods`)
+    const content = await response.json()
+    return content
+  } catch (e) {
+    console.log(e)
+    return null
+  }
+}
+
+export const getHistoryMoodsByTeam = async ({team, maxWeeks}) => {
+  try {
+    let response
+    if (maxWeeks === undefined) {
+      response = await fetch(`${apiUrl}/moods/?team=${team}`)
+    } else {
+      response = await fetch(`${apiUrl}/moods/?team=${team}&maxweeks=${maxWeeks}`)
+    }
+    const content = await response.json()
+    return content
+  } catch (e) {
+    console.log(e)
+    return null
+  }
+}
+
 export const postMood = async mood => {
   try {
     const response = await fetch(`${apiUrl}/moods/`, {
@@ -24,28 +51,6 @@ export const postMood = async mood => {
     })
     const updatedMood = await response.json()
     return updatedMood
-  } catch (e) {
-    console.log(e)
-    return null
-  }
-}
-
-export const getAllHistory = async () => {
-  try {
-    const response = await fetch(`${apiUrl}/moods`)
-    const content = await response.json()
-    return content
-  } catch (e) {
-    console.log(e)
-    return null
-  }
-}
-
-export const getHistoryByTeam = async (team) => {
-  try {
-    const response = await fetch(`${apiUrl}/moods/?team=${team}`)
-    const content = await response.json()
-    return content
   } catch (e) {
     console.log(e)
     return null

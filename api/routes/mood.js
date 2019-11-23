@@ -8,10 +8,13 @@ router.get('/', async function (req, res, next) {
 
   const date = req.query.date;
   let team = ((req.query.team === undefined) || (req.query.team === "")) ? config.DEFAULT_TEAM : req.query.team;
+  let maxWeeks = ((req.query.maxweeks === undefined) || (req.query.maxweeks === "")) ? 1 : req.query.maxweeks;
   let moods;
   if ((req.query.date !== undefined) && (req.query.date !== '')) {
     console.log('date', date);
-    moods = await db.getMoodsByDateAndTeam([date, team]);
+    moods = await db.getMoodsByTeamAndDay([team, date]);
+  } else if ((req.query.maxweeks !== undefined) && (req.query.maxweeks !== '')) {
+    moods = await db.getMoodsByTeamAndMaxWeeks([team], maxWeeks);
   } else {
     moods = await db.getAllMoodsByTeam([team]);
   }

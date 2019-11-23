@@ -1,9 +1,9 @@
 import React, { Component, useState } from 'react'
-import { postMood } from '../moodClient'
-import { MOOD, LABELS, IS_ACTIVATED } from '../config/config'
 import { dateOfDay } from '../service'
 import uniqid from 'uniqid'
 import queryString from 'query-string'
+import { MOOD, LABELS, IS_ACTIVATED } from '../config/config'
+import { postMood } from '../moodClient'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 
@@ -91,8 +91,8 @@ class Vote extends Component {
   render() {
     return (
 
-      <div className="cont h-100 w-100 d-flex justify-content-center">
-        <div className="app h-100 d-flex flex-column align-items-center">
+      <div className="cont w-100 d-flex justify-content-center">
+        <div className="app h-100 d-flex flex-column align-items-center justify-content-between">
           <Header team={this.state.team} />
           <div className="d-flex flex-column flex-wrap justify-content-center h-100">
             <p className="text-center">{LABELS.question}</p>

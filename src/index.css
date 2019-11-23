@@ -18,6 +18,7 @@ body {
   background-repeat: no-repeat;
   background-size: cover;
   background-attachment: fixed;
+  min-height: 100vh;
 }
 
 .app {
@@ -27,7 +28,8 @@ body {
   font-size: calc(14px + 3vmin);
   color: white;
   padding-bottom: 10px;
-  width: 80%;
+  width: 80vw;
+  min-height: 100vh
 }
 
 .italic {
@@ -43,7 +45,7 @@ body {
 }
 
 .inputinformation {
-  width: 150px;
+  width: 25%;
   height: 30px;
   display: inline-block;
   font-size: 0.4em;
@@ -57,7 +59,7 @@ body {
 
 .inputlabelinformation {
   font-size: 0.4em;
-  width: 300px;
+  width: 50%;
 }
 
 .badgemood {
@@ -69,7 +71,7 @@ body {
 }
 
 .arrow {
-  height: 30px;
+  width: 5%;
 } 
 
 .form {
@@ -77,19 +79,12 @@ body {
   border-radius: 20px;
   border: solid;
   border-color: black;
+  max-width: 650px;
 }
 
 @media only screen and (max-width: 768px) {
   /* For mobile phones: */
-  .emoji {
-    width: 50px;
-  }
-
-  .inputinformation {
-    width: 30%;
-  }
-
-  .inputlabelinformation {
-    width: 30%;
+  .app {
+    width: 95vw;
   }
 }

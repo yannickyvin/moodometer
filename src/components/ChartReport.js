@@ -21,15 +21,15 @@ export const ReportContainer = ({ activate, label, children }) => {
     )
 }
 
-export const ReportToday = ({ dayReport }) => (
+export const ReportToday = ({ reportDatas }) => (
   <Doughnut
     options={{ maintainAspectRatio: false, legend: false, rotation: 1.57 }}
     data={{
-      labels: dayReport.map(o => o.label),
+      labels: reportDatas.map(o => o.label),
       datasets: [
         {
-          data: dayReport.map(o => o.count),
-          backgroundColor: dayReport.map(o => o.color),
+          data: reportDatas.map(o => o.count),
+          backgroundColor: reportDatas.map(o => o.color),
         },
       ],
     }}
@@ -40,11 +40,10 @@ const Information = ({ information, color }) => (<span className="badgemood m-1"
 
 const getColorFromRate = (rate) => MOOD.options.find((x) => x.rate === rate).color
 
-export const DailyInformations = ({ todayMood }) => {
-  
+export const DailyInformations = ({ moods }) => {
   return(
     <div className="d-flex flex-row flex-wrap my-3">
-      {todayMood.map((x) => {
+      {moods.map((x) => {
         return (x.information !== undefined && x.information !== null && x.information.length > 0 
           && <Information key={x.session} information={x.information} color={getColorFromRate(x.rate)}/>)
       })}
@@ -52,13 +51,13 @@ export const DailyInformations = ({ todayMood }) => {
   )
 }
 
-export const LastInformations = ({ historyMood }) => {
+export const LastInformations = ({ moods }) => {
   return(
     <div className="d-flex flex-column flex-wrap my-3">
       {MOOD.options.map((option) => {
         return(
           <div key={option.rate} className="d-flex flex-row flex-wrap my-1">
-            {historyMood.map((x) => {
+            {moods.map((x) => {
               return (x.information !== undefined && x.information !== null && x.information.length > 0 && x.rate === option.rate 
                 && <Information key={x.session + x.day} information={x.information} color={getColorFromRate(x.rate)}/>)
             })}
@@ -94,12 +93,12 @@ const optionsBar = {
   }
 }
 
-export const ReportTrendByDay = ({ completeReport }) => {
-  if ((!completeReport) || (completeReport.length === 0))  return null
+export const ReportTrendByDay = ({ reportDatas }) => {
+  if ((!reportDatas) || (reportDatas.length === 0))  return null
 
   const data = {
-    labels: completeReport[0].datas.map(m => m.day),
-    datasets: completeReport.map(o => ({
+    labels: reportDatas[0].datas.map(m => m.day),
+    datasets: reportDatas.map(o => ({
       label: o.label,
       type: 'line',
       data: o.datas.map(c => (c.count)),
@@ -112,17 +111,17 @@ export const ReportTrendByDay = ({ completeReport }) => {
   return <Bar data={data} options={optionsBar} height={200} />
 }
 
-export const ReportTrendByWeek = ({ weekReport }) => {
+export const ReportTrendByWeek = ({ reportDatas }) => {
   const [NUMWEEK, DATA] = [0,1]
-  if ((!weekReport) || (weekReport.length === 0))  return null
+  if ((!reportDatas) || (reportDatas.length === 0))  return null
 
   const data = {
-    labels: weekReport.map(week => ('S' + week[NUMWEEK])),
+    labels: reportDatas.map(week => ('S' + week[NUMWEEK])),
     datasets: [{
       label: 'Moyenne de la semaine',
       backgroundColor: 'rgb(255, 99, 132)',
       borderColor: 'rgb(255, 99, 132)',
-      data: weekReport.map(week => week[DATA].average)
+      data: reportDatas.map(week => week[DATA].average)
     }],  
   }
 

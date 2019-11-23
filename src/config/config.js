@@ -9,14 +9,16 @@ export const MOOD = {
   ],
 }
 
+export const REPORT_MAX_WEEKS = 3
+
 export const LABELS = {
   question: 'Comment se passe ta journée de travail ?',
   informationUnderline: 'Avant de voter',
   informationNext: ', tu peux ajouter ici un mot en rapport avec ton humeur (évènement, tâche, difficulté...)',
   today: 'Aujourd\'hui',
-  trendByDayReport: 'Votes sur les 3 dernières semaines',
+  trendByDayReport: `Votes sur les ${REPORT_MAX_WEEKS} dernières semaines`,
   trendByWeekReport: 'Moyenne des votes par semaine',
-  lastInformationReport: 'Commentaires sur les 3 dernières semaines'
+  lastInformationReport: `Commentaires sur les ${REPORT_MAX_WEEKS} dernières semaines`
 }
 
 export const IS_ACTIVATED = {
