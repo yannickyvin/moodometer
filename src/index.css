@@ -14,7 +14,7 @@ body {
 }
 
 .cont {
-  background-image: url('./images/fab3.jpg');
+  background-image: url('./images/fab6.jpg');
   background-repeat: no-repeat;
   background-size: cover;
   background-attachment: fixed;
@@ -30,13 +30,6 @@ body {
   width: 80%;
 }
 
-.app-content {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;  
-}
-
 .italic {
   font-style: italic;
 }
@@ -49,14 +42,7 @@ body {
   width: 100px;
 }
 
-@media only screen and (max-width: 768px) {
-  /* For mobile phones: */
-  .emoji {
-    width: 50px;
-  }
-}
-
-.inputmood {
+.inputinformation {
   width: 150px;
   height: 30px;
   display: inline-block;
@@ -65,8 +51,13 @@ body {
   border: 1;
 }
 
-.inputmood:hover {
+.inputinformation:hover {
   background-color: #EEEEEE;
+}
+
+.inputlabelinformation {
+  font-size: 0.4em;
+  width: 300px;
 }
 
 .badgemood {
@@ -75,11 +66,6 @@ body {
   font-size: 0.6em;
   background-color: red;
   padding: 0 6px;
-}
-
-.small {
-  font-size: 0.4em;
-  width: 300px;
 }
 
 .arrow {
@@ -91,4 +77,19 @@ body {
   border-radius: 20px;
   border: solid;
   border-color: black;
+}
+
+@media only screen and (max-width: 768px) {
+  /* For mobile phones: */
+  .emoji {
+    width: 50px;
+  }
+
+  .inputinformation {
+    width: 30%;
+  }
+
+  .inputlabelinformation {
+    width: 30%;
+  }
 }

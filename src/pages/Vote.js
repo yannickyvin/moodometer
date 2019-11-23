@@ -17,7 +17,7 @@ if (window.localStorage.getItem('id') === null ) {
 }
 
 const Options = ({ onSelect }) => (
-  <div className="d-flex justify-content-center align-items-center">
+  <div className="d-flex flex-wrap justify-content-center align-items-center">
     {MOOD.options.map(o => (
       <button
         key={o.rate}
@@ -48,12 +48,12 @@ const InputFormMood = ({onInputChange}) => {
   return (
     <>
       <div className="form-group my-4">
-        <div className="d-flex form justify-content-center align-items-center">
-          <span id="wordhelp" className="px-1 my-2 form-text text-muted small italic">
+        <div className="d-flex flex-wrap form justify-content-center align-items-center">
+          <span id="wordhelp" className="inputlabelinformation px-1 my-2 form-text text-muted italic">
             <u>{LABELS.informationUnderline}</u>{LABELS.informationNext}
           </span>
           <img src="right-arrow.svg" className="arrow mx-1" alt="arrow" />
-          <input className="inputmood mx-2 px-3" aria-describedby="wordhelp" onChange={handleChangeInput} style={{backgroundColor: backgroundInput, border: border}} />
+          <input className="inputinformation mx-2 px-3" aria-describedby="wordhelp" onChange={handleChangeInput} style={{backgroundColor: backgroundInput, border: border}} />
         </div>
       </div>
     </>
@@ -92,9 +92,9 @@ class Vote extends Component {
     return (
 
       <div className="cont h-100 w-100 d-flex justify-content-center">
-        <div className="app h-100 d-flex flex-column space-between align-items-center">
+        <div className="app h-100 d-flex flex-column align-items-center">
           <Header team={this.state.team} />
-          <div className="d-flex flex-column justify-content-center align-items-center h-100">
+          <div className="d-flex flex-column flex-wrap justify-content-center h-100">
             <p className="text-center">{LABELS.question}</p>
             <Options onSelect={this.handleSelect} />
             {IS_ACTIVATED.information && <InputFormMood onInputChange={this.informationUpdate}/>}

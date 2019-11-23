@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { getTodayMoodsByTeam, getHistoryByTeam } from '../moodClient'
-import {ReportToday, ReportTrendByDay, ReportTrendByWeek, DailyInformations, LastInformations} from '../components/OpenChartReport'
+import {ReportContainer, ReportToday, ReportTrendByDay, ReportTrendByWeek, DailyInformations, LastInformations} from '../components/ChartReport'
 import {MOOD, LABELS, IS_ACTIVATED} from '../config/config'
 import queryString from 'query-string'
 import {getWeek} from 'date-fns'
@@ -31,44 +31,43 @@ class Report extends Component {
     const dayReport = this.createTodayReport(todayMood)
     const completeReport = this.createCompleteReport(historyMood)
     const weekReport = this.createWeekReport(historyMood)
+
     this.setState({ todayMood, historyMood, dayReport, completeReport, weekReport, team })
   }
 
   createTodayReport = (moods) => {
     let dayReport = [...MOOD.options]
+
     dayReport = dayReport.map((option) => ({...option, count: 0}))
     if (moods !== null && moods.length !== undefined) {
       moods.forEach((mood) => {
-        for (let i = 0; i < dayReport.length; i++) {
-          if (dayReport[i].rate === mood.rate) {dayReport[i].count += 1}
-        }
+        const rateOptionFound = dayReport.find(elt => elt.rate === mood.rate)
+        rateOptionFound.count++
       })
     }
     return dayReport
   }
   
   createCompleteReport = (moods) => {
-    let report = [...MOOD.options]
-    report = report.map((option) => ({...option, datas: []}))
+    let completeReport = [...MOOD.options]
+    completeReport = completeReport.map((option) => ({...option, datas: []}))
     
     if (moods !== null && moods.length !== undefined) {
       moods.forEach((mood) => {
         // is day already known ?
-        const found = report[0].datas.findIndex((data) => (data.day === mood.day))
+        const found = completeReport[0].datas.findIndex((data) => (data.day === mood.day))
         
         if (found === -1) {
           // day new => add day to each option and init count 
-          report = report.map((option) => ({...option, datas: [...option.datas, {day: mood.day, count: mood.rate === option.rate ? 1 : 0}]}))
+          completeReport = completeReport.map((option) => ({...option, datas: [...option.datas, {day: mood.day, count: mood.rate === option.rate ? 1 : 0}]}))
         } else {
-          // day not new => increment count on specific option 
-          for (let i = 0; i < report.length; i++) {
-            if (report[i].rate === mood.rate ) {report[i].datas[found].count += 1}
-          }
+          // day not new => increment count on specific option
+          const rateOptionFound = completeReport.find(elt => elt.rate === mood.rate)
+          rateOptionFound.datas[found].count += 1
         }
       })
     }
-   
-    return report
+    return completeReport
   }
 
   createWeekReport = (moods) => {
@@ -90,7 +89,7 @@ class Report extends Component {
 
     const arrayWeekRate = Array.from(weekRate)
     arrayWeekRate.sort((a, b) => (a[0] - b[0]))
-
+    
     return arrayWeekRate
   }
 
@@ -100,7 +99,7 @@ class Report extends Component {
       
         <div className="app d-flex flex-column space-between align-items-center h-200">
           <Header team={this.state.team} />
-          <div className="app-content w-100">
+          <div className="d-flex flex-column justify-content-center align-items-center w-100">
             <div className="h-20">
               <ReportToday dayReport={this.state.dayReport} />
             </div>
@@ -110,43 +109,20 @@ class Report extends Component {
             <div>
               <p className="font-weight-light">{LABELS.today}</p>
             </div>
-            {
-              IS_ACTIVATED.reportByDay &&
-              (<>
-              <div className="h-20 w-100 my-2">
-                <ReportTrendByDay completeReport={this.state.completeReport} />
-              </div>
-              <div className="d-flex justify-content-center">
-              <p className="font-weight-light">{LABELS.trendByDayReport}</p>
-              </div>
-              </>)
-            }
-            {
-              IS_ACTIVATED.reportByWeek &&
-              (<>
-              <div className="h-20 w-100 my-2">
-                  <ReportTrendByWeek weekReport={this.state.weekReport} />
-              </div>
-              <div className="d-flex justify-content-center">
-                <p className="font-weight-light">{LABELS.trendByWeekReport}</p>
-              </div>
-              </>)
-            }
-            {
-              IS_ACTIVATED.reportLastInformations &&
-              (<>
-              <div className="h-20 w-100 my-2">
-                  <LastInformations historyMood={this.state.historyMood} />
-              </div>
-              <div className="d-flex justify-content-center">
-                <p className="font-weight-light">{LABELS.lastInformationReport}</p>
-              </div>
-              </>)
-            }
+            <ReportContainer activate={IS_ACTIVATED.reportByDay} label={LABELS.trendByDayReport}>
+              <ReportTrendByDay completeReport={this.state.completeReport} />
+            </ReportContainer>
+
+            <ReportContainer activate={IS_ACTIVATED.reportByWeek} label={LABELS.trendByWeekReport}>
+              <ReportTrendByWeek weekReport={this.state.weekReport} />
+            </ReportContainer>
+
+            <ReportContainer activate={IS_ACTIVATED.reportLastInformations} label={LABELS.lastInformationReport}>
+              <LastInformations historyMood={this.state.historyMood} />
+            </ReportContainer>
           </div>
           
           <Footer link="/" libelle="Home" search={this.props.location.search} />
-
         </div>
       
       </div>

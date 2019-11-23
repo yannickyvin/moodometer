@@ -2,6 +2,24 @@ import React from 'react'
 import { Bar, Doughnut } from 'react-chartjs-2'
 import { MOOD } from '../config/config.js'
 
+export const ReportContainer = ({ activate, label, children }) => {
+  return(
+      <>
+      {activate &&
+        (
+          <>
+            <div className="h-20 w-100 my-2">
+              {children}
+            </div>
+            <div className="d-flex justify-content-center">
+              <p className="font-weight-light">{label}</p>
+            </div>
+          </>
+        )
+      }
+      </>
+    )
+}
 
 export const ReportToday = ({ dayReport }) => (
   <Doughnut
@@ -18,7 +36,7 @@ export const ReportToday = ({ dayReport }) => (
   />
 )
 
-const Information = ({ information, color }) => (<span className="badgemood mx-1" style={{backgroundColor : color}}>{information}</span>)
+const Information = ({ information, color }) => (<span className="badgemood m-1" style={{backgroundColor : color}}>{information}</span>)
 
 const getColorFromRate = (rate) => MOOD.options.find((x) => x.rate === rate).color
 
@@ -39,7 +57,7 @@ export const LastInformations = ({ historyMood }) => {
     <div className="d-flex flex-column flex-wrap my-3">
       {MOOD.options.map((option) => {
         return(
-          <div className="d-flex flex-row flex-wrap my-1">
+          <div key={option.rate} className="d-flex flex-row flex-wrap my-1">
             {historyMood.map((x) => {
               return (x.information !== undefined && x.information !== null && x.information.length > 0 && x.rate === option.rate 
                 && <Information key={x.session + x.day} information={x.information} color={getColorFromRate(x.rate)}/>)
@@ -95,15 +113,16 @@ export const ReportTrendByDay = ({ completeReport }) => {
 }
 
 export const ReportTrendByWeek = ({ weekReport }) => {
+  const [NUMWEEK, DATA] = [0,1]
   if ((!weekReport) || (weekReport.length === 0))  return null
 
   const data = {
-    labels: weekReport.map(m => ('S' + m[0])),
+    labels: weekReport.map(week => ('S' + week[NUMWEEK])),
     datasets: [{
       label: 'Moyenne de la semaine',
       backgroundColor: 'rgb(255, 99, 132)',
       borderColor: 'rgb(255, 99, 132)',
-      data: weekReport.map(m => m[1].average)
+      data: weekReport.map(week => week[DATA].average)
     }],  
   }
 
