@@ -88,6 +88,7 @@ const optionsBar = {
       },
       ticks: {
         fontColor: "white",
+        beginAtZero: true
       }
     }]
   }
