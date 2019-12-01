@@ -1,5 +1,6 @@
 const express = require('express');
 const moodsRouter = require('./routes/mood');
+const teamsRouter = require('./routes/team');
 
 const app = express();
 
@@ -17,4 +18,5 @@ app.use(function(req, res, next) {
 
 app.use(express.json()); // for parsing application/json
 app.use('/moods', moodsRouter);
+app.use('/teams', teamsRouter);
 

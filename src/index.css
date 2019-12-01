@@ -14,7 +14,7 @@ body {
 }
 
 .cont {
-  background-image: url('./images/fab12.jpg');
+  background-image: url('./images/fab8.jpg');
   background-repeat: no-repeat;
   background-size: cover;
   background-attachment: fixed;
@@ -80,6 +80,10 @@ body {
   border: solid;
   border-color: black;
   max-width: 650px;
+}
+
+.toastadmin {
+  color: black;
 }
 
 @media only screen and (max-width: 768px) {

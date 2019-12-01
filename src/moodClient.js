@@ -56,3 +56,46 @@ export const postMood = async mood => {
     return null
   }
 }
+
+export const getAllTeams = async () => {
+  try {
+    const response = await fetch(`${apiUrl}/teams`)
+    const content = await response.json()
+    return content
+  } catch (e) {
+    console.log(e)
+    return null
+  }
+}
+
+export const postTeam = async team => {
+  try {
+    const response = await fetch(`${apiUrl}/teams/`, {
+      method: 'POST',
+      mode: 'cors',
+      body: JSON.stringify(team),
+      headers: new Headers({
+        'Content-Type': 'application/json'
+      })
+    })
+    const updatedTeam = await response.json()
+    return updatedTeam
+  } catch (e) {
+    console.log(e)
+    return null
+  }
+}
+
+export const deleteTeam = async team => {
+  try {
+    const response = await fetch(`${apiUrl}/teams/?publicid=${team.publicid}`, {
+      method: 'DELETE',
+      mode: 'cors'
+    })
+    const updatedTeam = await response.json()
+    return updatedTeam
+  } catch (e) {
+    console.log(e)
+    return null
+  }
+}

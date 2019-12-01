@@ -34,5 +34,17 @@ module.exports = {
   insertMood: (params) => {
     const text = "insert into mood (session, day, rate, team, information) values ($1, TO_DATE($2, 'YYYY-MM-DD'), $3, $4, $5) on conflict on constraint session_day_team do update set rate=$3, information=$5";
     return pool.query(text, params);
-  }
+  },
+  insertTeam: (params) => {
+    const text = "insert into team (nom, publicid) values ($1, $2)";
+    return pool.query(text, params);
+  },
+  getAllTeams: () => {
+    const text = "select nom, publicid from team";
+    return pool.query(text);
+  },
+  deleteTeam: (params) => {
+    const text = "delete from team where publicid=$1";
+    return pool.query(text, params);
+  },
 };

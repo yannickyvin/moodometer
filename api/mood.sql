@@ -11,4 +11,5 @@ CREATE TABLE mood (
 CREATE TABLE team (
 	id serial,
   nom text NOT NULL,
+  publicid text NOT NULL
 );
