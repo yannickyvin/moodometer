@@ -3,7 +3,8 @@ import { dateOfDay } from '../service'
 import uniqid from 'uniqid'
 import queryString from 'query-string'
 import { MOOD, LABELS, IS_ACTIVATED } from '../config/config'
-import { postMood } from '../moodClient'
+import { postMood, getTeamName } from '../moodClient'
+import Layout from '../components/Layout'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 
@@ -63,13 +64,22 @@ const InputFormMood = ({onInputChange}) => {
 class Vote extends Component {
 
   state = {
-    team: MOOD.defaultTeam,
+    team: '',
     information: ""
   }
 
   componentDidMount = () => {
+    this.refresh();
+  }
+  
+  refresh = async () => {
     const parsed = queryString.parse(this.props.location.search)
-    this.setState({team : parsed.team === undefined ? MOOD.defaultTeam : parsed.team})
+    if (parsed.team === undefined) {
+      this.setState({team : MOOD.defaultTeam})
+    } else {
+      const teamName = await getTeamName(parsed.team);
+      this.setState({team: teamName === undefined ? MOOD.defaultTeam : teamName})
+    }
   }
 
   handleSelect = async moodId => {
@@ -90,8 +100,7 @@ class Vote extends Component {
 
   render() {
     return (
-
-      <div className="cont w-100 d-flex justify-content-center">
+      <Layout>
         <div className="app h-100 d-flex flex-column align-items-center justify-content-between">
           <Header team={this.state.team} />
           <div className="d-flex flex-column flex-wrap justify-content-center h-100">
@@ -102,7 +111,7 @@ class Vote extends Component {
 
           <Footer link="/report" libelle="Rapport" search={this.props.location.search} />
         </div>
-      </div>
+      </Layout>
       
     )
   }

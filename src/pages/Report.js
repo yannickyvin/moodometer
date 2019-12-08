@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
-import { getTodayMoodsByTeam, getHistoryMoodsByTeam } from '../moodClient'
+import { getTodayMoodsByTeam, getHistoryMoodsByTeam, getTeamName } from '../moodClient'
 import {ReportContainer, ReportToday, ReportTrendByDay, ReportTrendByWeek, DailyInformations, LastInformations} from '../components/ChartReport'
 import {MOOD, REPORT_MAX_WEEKS, LABELS, IS_ACTIVATED} from '../config/config'
 import queryString from 'query-string'
 import {getWeek} from 'date-fns'
+import Layout from '../components/Layout'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 
@@ -14,7 +15,7 @@ class Report extends Component {
     historyLastWeeksMoods: [],
     completeReport: [],
     weekReport: [],
-    team: MOOD.defaultTeam
+    team: ''
   }
 
   componentDidMount() {
@@ -23,8 +24,15 @@ class Report extends Component {
   }
 
   refresh = async () => {
-    const props = queryString.parse(this.props.location.search)
-    const team = props.team === undefined ? MOOD.defaultTeam : props.team 
+    const parsed = queryString.parse(this.props.location.search)
+
+    let team
+    if (parsed.team === undefined) {
+      team = MOOD.defaultTeam
+    } else {
+      const teamName = await getTeamName(parsed.team);
+      team = teamName === undefined ? MOOD.defaultTeam : teamName
+    }
 
     const todayMoods = await getTodayMoodsByTeam(team)
     const historyLastWeeksMoods = await getHistoryMoodsByTeam({team, maxWeeks: REPORT_MAX_WEEKS})
@@ -97,8 +105,7 @@ class Report extends Component {
 
   render() {
     return (
-      <div className="cont w-100 d-flex justify-content-center">
-      
+      <Layout>
         <div className="app d-flex flex-column space-between align-items-center h-200">
           <Header team={this.state.team} />
           <div className="d-flex flex-column justify-content-center align-items-center w-100">
@@ -126,8 +133,8 @@ class Report extends Component {
           
           <Footer link="/" libelle="Home" search={this.props.location.search} />
         </div>
+      </Layout>
       
-      </div>
     )
   }
 }

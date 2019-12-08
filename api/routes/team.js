@@ -4,17 +4,22 @@ const db = require('../db/moodDB.js');
 const config = require('../config/config.js');
 
 router.get('/', async function (req, res, next) {
-  console.log('team get');
+  const publicid = req.query.publicid;
 
-  let teams;
-  teams = await db.getAllTeams();
-
-  res.jsonp(teams.rows);
+  if (publicid === undefined) {
+    let teams;
+    teams = await db.getAllTeams();
+  
+    res.jsonp(teams.rows);
+  } else {
+    let team;
+    team = await db.getTeamByPublicId([publicid]);
+  
+    res.jsonp(team.rows);
+  }
 })
 
 router.post('/', async function(req, res) {
-  console.log('team post /', req.body);
-
   const nom = req.body.nom;
   const publicid = req.body.publicid;
   try {
@@ -26,8 +31,6 @@ router.post('/', async function(req, res) {
 })
 
 router.delete('/', async function(req, res) {
-  console.log('team delete /', req.body);
-
   const publicid = req.query.publicid;
   try {
     await db.deleteTeam([publicid]);

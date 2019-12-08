@@ -1,4 +1,5 @@
 import React, { Component, useState } from 'react'
+import Layout from '../components/Layout'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import {getAllTeams, postTeam, deleteTeam} from '../moodClient'
@@ -146,8 +147,7 @@ class Admin extends Component {
 
   render() {
     return (
-
-      <div className="cont w-100 d-flex justify-content-center">
+      <Layout>
         <div className="app h-100 d-flex flex-column align-items-center justify-content-between">
           <Header team={'Administration'} />
           <AddTeamForm insertTeam={this.handleInsertTeam}/>
@@ -182,7 +182,7 @@ class Admin extends Component {
           </Modal>
           <Footer link="/report" libelle="Rapport" search={this.props.location.search} />
         </div>
-      </div>
+      </Layout>
     )
   }
 }

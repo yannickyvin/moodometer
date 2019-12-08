@@ -43,6 +43,10 @@ module.exports = {
     const text = "select nom, publicid from team";
     return pool.query(text);
   },
+  getTeamByPublicId: (params) => {
+    const text = "select nom, publicid from team where publicid=$1";
+    return pool.query(text, params);
+  },
   deleteTeam: (params) => {
     const text = "delete from team where publicid=$1";
     return pool.query(text, params);

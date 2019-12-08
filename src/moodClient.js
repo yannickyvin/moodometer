@@ -99,3 +99,15 @@ export const deleteTeam = async team => {
     return null
   }
 }
+
+export const getTeamName = async teamId => {
+  try {
+    const response = await fetch(`${apiUrl}/teams?publicid=${teamId}`)
+    const content = await response.json()
+    const result = content.length === 0 ? undefined : content[0].nom
+    return result
+  } catch (e) {
+    console.log(e)
+    return null
+  }
+}
