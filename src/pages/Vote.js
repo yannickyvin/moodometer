@@ -74,6 +74,7 @@ class Vote extends Component {
   
   refresh = async () => {
     const parsed = queryString.parse(this.props.location.search)
+    console.log('parsed team', parsed)
     if (parsed.team === undefined) {
       this.setState({team : MOOD.defaultTeam})
     } else {

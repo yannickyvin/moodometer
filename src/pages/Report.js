@@ -24,8 +24,10 @@ class Report extends Component {
   }
 
   refresh = async () => {
-    const parsed = queryString.parse(this.props.location.search)
+    console.log('this.props.location.search', this.props.location.search)
 
+    const parsed = queryString.parse(this.props.location.search)
+    console.log('parsed', parsed)
     let team
     if (parsed.team === undefined) {
       team = MOOD.defaultTeam
