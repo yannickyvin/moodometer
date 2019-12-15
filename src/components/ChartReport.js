@@ -1,24 +1,30 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { Bar, Doughnut } from 'react-chartjs-2'
 import { MOOD } from '../config/config.js'
 
 export const ReportContainer = ({ activate, label, children }) => {
-  return(
-      <>
+  return (
+    <>
       {activate &&
         (
           <>
-            <div className="h-20 w-100 my-2">
+            <div className='h-20 w-100 my-2'>
               {children}
             </div>
-            <div className="d-flex justify-content-center">
-              <p className="font-weight-light">{label}</p>
+            <div className='d-flex justify-content-center'>
+              <p className='font-weight-light'>{label}</p>
             </div>
           </>
-        )
-      }
-      </>
-    )
+        )}
+    </>
+  )
+}
+
+ReportContainer.propTypes = {
+  activate: PropTypes.bool,
+  label: PropTypes.string,
+  children: PropTypes.element.isRequired
 }
 
 export const ReportToday = ({ reportDatas }) => (
@@ -29,43 +35,60 @@ export const ReportToday = ({ reportDatas }) => (
       datasets: [
         {
           data: reportDatas.map(o => o.count),
-          backgroundColor: reportDatas.map(o => o.color),
-        },
-      ],
+          backgroundColor: reportDatas.map(o => o.color)
+        }
+      ]
     }}
   />
 )
 
-const Information = ({ information, color }) => (<span className="badgemood m-1" style={{backgroundColor : color}}>{information}</span>)
+ReportToday.propTypes = {
+  reportDatas: PropTypes.array
+}
+
+const Information = ({ information, color }) => (<span className='badgemood m-1' style={{ backgroundColor: color }}>{information}</span>)
+
+Information.propTypes = {
+  information: PropTypes.string,
+  color: PropTypes.string
+}
 
 const getColorFromRate = (rate) => MOOD.options.find((x) => x.rate === rate).color
 
 export const DailyInformations = ({ moods }) => {
-  return(
-    <div className="d-flex flex-row flex-wrap my-3">
+  return (
+    <div className='d-flex flex-row flex-wrap my-3'>
       {moods.map((x) => {
-        return (x.information !== undefined && x.information !== null && x.information.length > 0 
-          && <Information key={x.session} information={x.information} color={getColorFromRate(x.rate)}/>)
+        return (x.information !== undefined && x.information !== null && x.information.length > 0 &&
+          <Information key={x.session} information={x.information} color={getColorFromRate(x.rate)} />)
       })}
     </div>
   )
 }
 
+DailyInformations.propTypes = {
+  moods: PropTypes.array
+}
+
 export const LastInformations = ({ moods }) => {
-  return(
-    <div className="d-flex flex-column flex-wrap my-3">
+  return (
+    <div className='d-flex flex-column flex-wrap my-3'>
       {MOOD.options.map((option) => {
-        return(
-          <div key={option.rate} className="d-flex flex-row flex-wrap my-1">
+        return (
+          <div key={option.rate} className='d-flex flex-row flex-wrap my-1'>
             {moods.map((x) => {
-              return (x.information !== undefined && x.information !== null && x.information.length > 0 && x.rate === option.rate 
-                && <Information key={x.session + x.day} information={x.information} color={getColorFromRate(x.rate)}/>)
+              return (x.information !== undefined && x.information !== null && x.information.length > 0 && x.rate === option.rate &&
+                <Information key={x.session + x.day} information={x.information} color={getColorFromRate(x.rate)} />)
             })}
           </div>
         )
       })}
     </div>
   )
+}
+
+LastInformations.propTypes = {
+  moods: PropTypes.array
 }
 
 const optionsBar = {
@@ -78,7 +101,7 @@ const optionsBar = {
         color: 'rgb(255, 255, 255, 0.2)'
       },
       ticks: {
-        fontColor: "white",
+        fontColor: 'white'
       }
     }],
     yAxes: [{
@@ -87,7 +110,7 @@ const optionsBar = {
         color: 'rgb(255, 255, 255, 0.2)'
       },
       ticks: {
-        fontColor: "white",
+        fontColor: 'white',
         beginAtZero: true
       }
     }]
@@ -95,7 +118,7 @@ const optionsBar = {
 }
 
 export const ReportTrendByDay = ({ reportDatas }) => {
-  if ((!reportDatas) || (reportDatas.length === 0))  return null
+  if ((!reportDatas) || (reportDatas.length === 0)) return null
 
   const data = {
     labels: reportDatas[0].datas.map(m => m.day),
@@ -105,16 +128,20 @@ export const ReportTrendByDay = ({ reportDatas }) => {
       data: o.datas.map(c => (c.count)),
       fill: false,
       borderColor: o.color,
-      backgroundColor: o.color,
-    })),
+      backgroundColor: o.color
+    }))
   }
 
   return <Bar data={data} options={optionsBar} height={200} />
 }
 
+ReportTrendByDay.propTypes = {
+  reportDatas: PropTypes.array
+}
+
 export const ReportTrendByWeek = ({ reportDatas }) => {
-  const [NUMWEEK, DATA] = [0,1]
-  if ((!reportDatas) || (reportDatas.length === 0))  return null
+  const [NUMWEEK, DATA] = [0, 1]
+  if ((!reportDatas) || (reportDatas.length === 0)) return null
 
   const data = {
     labels: reportDatas.map(week => ('S' + week[NUMWEEK])),
@@ -123,8 +150,12 @@ export const ReportTrendByWeek = ({ reportDatas }) => {
       backgroundColor: 'rgb(255, 99, 132)',
       borderColor: 'rgb(255, 99, 132)',
       data: reportDatas.map(week => week[DATA].average)
-    }],  
+    }]
   }
 
   return <Bar data={data} options={optionsBar} height={200} />
+}
+
+ReportTrendByWeek.propTypes = {
+  reportDatas: PropTypes.array
 }

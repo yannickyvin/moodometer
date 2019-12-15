@@ -4,9 +4,12 @@
   "private": true,
   "homepage": "https://slavagu.github.io/moodometer",
   "dependencies": {
+    "babel-eslint": "^9.0.0",
     "bootstrap": "^4.3.1",
     "chart.js": "^2.8.0",
     "date-fns": "^2.7.0",
+    "eslint": "^5.12.0",
+    "prop-types": "^15.7.2",
     "query-string": "^6.8.3",
     "react": "^16.12.0",
     "react-bootstrap": "^1.0.0-beta.16",
@@ -20,7 +23,12 @@
   },
   "devDependencies": {
     "eslint-config-standard": "^14.1.0",
-    "eslint-plugin-react": "^7.16.0",
+    "eslint-config-standard-react": "^9.2.0",
+    "eslint-plugin-import": "^2.19.1",
+    "eslint-plugin-node": "^10.0.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-react": "^7.17.0",
+    "eslint-plugin-standard": "^4.0.1",
     "gh-pages": "^2.0.1"
   },
   "scripts": {
@@ -30,13 +38,6 @@
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
-  },
-  "eslintConfig": {
-    "extends": [
-      "eslint:recommended",
-      "plugin:react/recommended",
-      "standard"
-    ]
   },
   "browserslist": [
     ">0.2%",

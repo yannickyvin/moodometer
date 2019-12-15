@@ -1,4 +1,5 @@
 import React, { Component, useState } from 'react'
+import PropTypes from 'prop-types'
 import { dateOfDay } from '../service'
 import uniqid from 'uniqid'
 import queryString from 'query-string'
@@ -10,30 +11,34 @@ import Footer from '../components/Footer'
 
 let id
 
-if (window.localStorage.getItem('id') === null ) {
-  id = uniqid();
+if (window.localStorage.getItem('id') === null) {
+  id = uniqid()
   window.localStorage.setItem('id', id)
 } else {
   id = window.localStorage.getItem('id')
 }
 
 const Options = ({ onSelect }) => (
-  <div className="d-flex flex-wrap justify-content-center align-items-center">
+  <div className='d-flex flex-wrap justify-content-center align-items-center'>
     {MOOD.options.map(o => (
       <button
         key={o.rate}
-        className={`btn btn-xl`}
+        className='btn btn-xl'
         onClick={() => onSelect(o.rate)}
       >
-        <img className={`emoji`} src={o.img} alt={o.img} />
+        <img className='emoji' src={o.img} alt={o.img} />
       </button>
     ))}
   </div>
 )
 
-const InputFormMood = ({onInputChange}) => {
-  const [backgroundInput, setBackgroundInput]   = useState('#fff')
-  const [border, setBorder]   = useState('1')
+Options.propTypes = {
+  onSelect: PropTypes.func
+}
+
+const InputFormMood = ({ onInputChange }) => {
+  const [backgroundInput, setBackgroundInput] = useState('#fff')
+  const [border, setBorder] = useState('1')
 
   const handleChangeInput = (event) => {
     if (event.target.value.length > 2) {
@@ -48,38 +53,45 @@ const InputFormMood = ({onInputChange}) => {
 
   return (
     <>
-      <div className="form-group my-4">
-        <div className="d-flex flex-wrap form justify-content-center align-items-center">
-          <span id="wordhelp" className="inputlabelinformation px-1 my-2 form-text text-muted italic">
+      <div className='form-group my-4'>
+        <div className='d-flex flex-wrap form justify-content-center align-items-center'>
+          <span id='wordhelp' className='inputlabelinformation px-1 my-2 form-text text-muted italic'>
             <u>{LABELS.informationUnderline}</u>{LABELS.informationNext}
           </span>
-          <img src="right-arrow.svg" className="arrow mx-1" alt="arrow" />
-          <input className="inputinformation mx-2 px-3" aria-describedby="wordhelp" onChange={handleChangeInput} style={{backgroundColor: backgroundInput, border: border}} />
+          <img src='right-arrow.svg' className='arrow mx-1' alt='arrow' />
+          <input className='inputinformation mx-2 px-3' aria-describedby='wordhelp' onChange={handleChangeInput} style={{ backgroundColor: backgroundInput, border: border }} />
         </div>
       </div>
     </>
   )
 }
 
+InputFormMood.propTypes = {
+  onInputChange: PropTypes.func
+}
+
 class Vote extends Component {
+  propTypes = {
+    history: PropTypes.object,
+    location: PropTypes.object
+  }
 
   state = {
     team: '',
-    information: ""
+    information: ''
   }
 
   componentDidMount = () => {
-    this.refresh();
+    this.refresh()
   }
-  
+
   refresh = async () => {
     const parsed = queryString.parse(this.props.location.search)
-    console.log('parsed team', parsed)
     if (parsed.team === undefined) {
-      this.setState({team : MOOD.defaultTeam})
+      this.setState({ team: MOOD.defaultTeam })
     } else {
-      const teamName = await getTeamName(parsed.team);
-      this.setState({team: teamName === undefined ? MOOD.defaultTeam : teamName})
+      const teamName = await getTeamName(parsed.team)
+      this.setState({ team: teamName === undefined ? MOOD.defaultTeam : teamName })
     }
   }
 
@@ -95,25 +107,25 @@ class Vote extends Component {
     this.props.history.push(`/report${this.props.location.search}`)
   }
 
-  informationUpdate = (event) => {
-    this.setState({information: event.target.value})
+  handleInputChange = (event) => {
+    this.setState({ information: event.target.value })
   }
 
-  render() {
+  render () {
     return (
       <Layout>
-        <div className="app h-100 d-flex flex-column align-items-center justify-content-between">
+        <div className='app h-100 d-flex flex-column align-items-center justify-content-between'>
           <Header team={this.state.team} />
-          <div className="d-flex flex-column flex-wrap justify-content-center h-100">
-            <p className="text-center">{LABELS.question}</p>
+          <div className='d-flex flex-column flex-wrap justify-content-center h-100'>
+            <p className='text-center'>{LABELS.question}</p>
             <Options onSelect={this.handleSelect} />
-            {IS_ACTIVATED.information && <InputFormMood onInputChange={this.informationUpdate}/>}
+            {IS_ACTIVATED.information && <InputFormMood onInputChange={this.handleInputChange} />}
           </div>
 
-          <Footer link="/report" libelle="Rapport" search={this.props.location.search} />
+          <Footer link='/report' libelle='Rapport' search={this.props.location.search} />
         </div>
       </Layout>
-      
+
     )
   }
 }

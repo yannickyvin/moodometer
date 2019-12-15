@@ -1,14 +1,19 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
-const Header = (props) => {
-  return(
+const Header = ({ team }) => {
+  return (
     <>
       <header>
-        <a className="header" href="https://github.com/yannickyvin/moodometer">moodometer</a>
+        <a className='header' href='https://github.com/yannickyvin/moodometer'>moodometer</a>
       </header>
-      <p className="font-weight italic">Equipe : {props.team}</p>
+      <p className='font-weight italic'>Equipe : {team}</p>
     </>
   )
+}
+
+Header.propTypes = {
+  team: PropTypes.string
 }
 
 export default Header

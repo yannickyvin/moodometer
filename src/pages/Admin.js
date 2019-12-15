@@ -1,52 +1,61 @@
 import React, { Component, useState } from 'react'
+import PropTypes from 'prop-types'
 import Layout from '../components/Layout'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
-import {getAllTeams, postTeam, deleteTeam} from '../moodClient'
+import { getAllTeams, postTeam, deleteTeam } from '../moodClient'
 import uuid from 'uuid/v1'
-import { Toast, Modal, Button } from 'react-bootstrap';
+import { Toast, Modal, Button } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 
-const AddTeamForm = (props) => {
+const AddTeamForm = ({ onValidate }) => {
   const [team, setTeam] = useState('')
 
   const handleChangeInput = (event) => {
     setTeam(event.target.value)
   }
 
-  const insertTeam = async () => {
-    props.insertTeam(team)
+  const handleValidate = async () => {
+    onValidate(team)
     setTeam('')
   }
 
   return (
     <form>
-      <div className="d-flex flex-row justify-content-center">
-        <div className="input-group">
-          <input className="form-control" type="text" onChange={handleChangeInput} value={team} placeholder="Team à ajouter"></input> 
+      <div className='d-flex flex-row justify-content-center'>
+        <div className='input-group'>
+          <input className='form-control' type='text' onChange={handleChangeInput} value={team} placeholder='Team à ajouter' />
         </div>
-        <div className="input-group">
-          <button className="btn btn-primary form-control" onClick={insertTeam}>Ajouter</button>
+        <div className='input-group'>
+          <button className='btn btn-primary form-control' onClick={handleValidate}>Ajouter</button>
         </div>
       </div>
     </form>
   )
 }
 
-const ListOfTeams = (props) => {
+AddTeamForm.propTypes = {
+  onValidate: PropTypes.func
+}
 
+const ListOfTeams = (props) => {
   const selectTeam = (team) => {
     props.onTeamChange(team)
   }
 
   return (
-    <div className="d-flex flex-row flex-wrap">
-      {props.teams.map( (team) => (
-        <button key={team.publicid} className="btn btn-info mx-1 my-1" type="submit" onClick={() => selectTeam(team)}>{team.nom}</button>
-        )
+    <div className='d-flex flex-row flex-wrap'>
+      {props.teams.map((team) => (
+        <button key={team.publicid} className='btn btn-info mx-1 my-1' type='submit' onClick={() => selectTeam(team)}>{team.nom}</button>
+      )
       )}
     </div>
   )
+}
+
+ListOfTeams.propTypes = {
+  teams: PropTypes.array,
+  onTeamChange: PropTypes.func
 }
 
 const DetailTeamForm = (props) => {
@@ -58,29 +67,36 @@ const DetailTeamForm = (props) => {
     props.onTeamDelete()
   }
 
-  return(
-    <div className="d-flex flex-column justify-content-center align-items-center">
-      <div className="small">
+  return (
+    <div className='d-flex flex-column justify-content-center align-items-center'>
+      <div className='small'>
         Nom : {props.team.nom}
       </div>
-      <div className="small">
+      <div className='small'>
         Identifiant public : {props.team.publicid}
       </div>
-      <div className="small">
+      <div className='small'>
         Url : {urlVote}
       </div>
       <div>
         <Link to={urlRapport}>
-          <button className="btn btn-primary mx-1">Voir le rapport</button> 
+          <button className='btn btn-primary mx-1'>Voir le rapport</button>
         </Link>
-        <button className="btn btn-danger mx-1" onClick={deleteTeam}>Supprimer la team</button>
+        <button className='btn btn-danger mx-1' onClick={deleteTeam}>Supprimer la team</button>
       </div>
     </div>
   )
 }
 
+DetailTeamForm.propTypes = {
+  team: PropTypes.string,
+  onTeamDelete: PropTypes.func
+}
 
 class Admin extends Component {
+  propTypes = {
+    location: PropTypes.object
+  }
 
   state = {
     currentTeam: {},
@@ -100,7 +116,7 @@ class Admin extends Component {
 
     this.setState({
       teams
-    }) 
+    })
   }
 
   handleInsertTeam = async (nom) => {
@@ -110,11 +126,11 @@ class Admin extends Component {
     }
 
     if (nom.length < 3) {
-      this.setState({showToast: true, messageToast: 'Le nom de la team doit contenir au moins 3 caractères'})
+      this.setState({ showToast: true, messageToast: 'Le nom de la team doit contenir au moins 3 caractères' })
     } else if (this.state.teams.find(team => (team.nom === nom)) === undefined) {
       await postTeam(newTeam)
     } else {
-      this.setState({showToast: true, messageToast: 'Cette Team existe déjà'})
+      this.setState({ showToast: true, messageToast: 'Cette Team existe déjà' })
     }
 
     this.refreshTeams()
@@ -136,7 +152,7 @@ class Admin extends Component {
   handleConfirmDeleteTeam = async () => {
     await deleteTeam(this.state.currentTeam)
     this.setState({
-      showToast: true, 
+      showToast: true,
       messageToast: `Team ${this.state.currentTeam.nom} supprimée`,
       showModal: false,
       messageModal: ''
@@ -144,43 +160,44 @@ class Admin extends Component {
     this.refreshTeams()
   }
 
-
-  render() {
+  render () {
     return (
       <Layout>
-        <div className="app h-100 d-flex flex-column align-items-center justify-content-between">
-          <Header team={'Administration'} />
-          <AddTeamForm insertTeam={this.handleInsertTeam}/>
-          <ListOfTeams teams={this.state.teams} teamSelected={this.state.currentTeam} onTeamChange={this.handleSelectTeam}/>
+        <div className='app h-100 d-flex flex-column align-items-center justify-content-between'>
+          <Header team='Administration' />
+          <AddTeamForm onValidate={this.handleInsertTeam} />
+          <ListOfTeams teams={this.state.teams} teamSelected={this.state.currentTeam} onTeamChange={this.handleSelectTeam} />
           {this.state.currentTeam.nom !== undefined &&
-            <DetailTeamForm team={this.state.currentTeam} onTeamDelete={this.handleDeleteTeam}/>
-          }
-          <Toast style={{
-                  position: 'absolute',
-                  bottom: 0,
-                  right: 0,
-                }}
-            onClose={() => this.setState({showToast: false})} show={this.state.showToast} delay={3000} autohide>
+            <DetailTeamForm team={this.state.currentTeam} onTeamDelete={this.handleDeleteTeam} />}
+          <Toast
+            style={{
+              position: 'absolute',
+              bottom: 0,
+              right: 0
+            }}
+            onClose={() => this.setState({ showToast: false })}
+            show={this.state.showToast} delay={3000} autohide
+          >
             <Toast.Header>
-               <strong className="mr-auto">Information</strong>
+              <strong className='mr-auto'>Information</strong>
             </Toast.Header>
-            <Toast.Body className="toastadmin">{this.state.messageToast}</Toast.Body>
+            <Toast.Body className='toastadmin'>{this.state.messageToast}</Toast.Body>
           </Toast>
-          <Modal show={this.state.showModal} onHide={() => this.setState({showModal: false})}>
+          <Modal show={this.state.showModal} onHide={() => this.setState({ showModal: false })}>
             <Modal.Header closeButton>
               <Modal.Title>Confirmation</Modal.Title>
             </Modal.Header>
             <Modal.Body>{this.state.messageModal}</Modal.Body>
             <Modal.Footer>
-              <Button variant="secondary" onClick={() => this.setState({showModal: false})}>
+              <Button variant='secondary' onClick={() => this.setState({ showModal: false })}>
                 Annuler
               </Button>
-              <Button variant="primary" onClick={this.handleConfirmDeleteTeam}>
+              <Button variant='primary' onClick={this.handleConfirmDeleteTeam}>
                 Confirmer
               </Button>
             </Modal.Footer>
           </Modal>
-          <Footer link="/report" libelle="Rapport" search={this.props.location.search} />
+          <Footer link='/report' libelle='Rapport' search={this.props.location.search} />
         </div>
       </Layout>
     )

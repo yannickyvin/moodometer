@@ -1,4 +1,5 @@
-import {dateOfDay} from './service.js'
+/* eslint-disable no-undef */
+import { dateOfDay } from './service.js'
 const apiUrl = process.env.REACT_APP_API_URL
 
 export const getTodayMoodsByTeam = async (team) => {
@@ -23,7 +24,7 @@ export const getAllMoods = async () => {
   }
 }
 
-export const getHistoryMoodsByTeam = async ({team, maxWeeks}) => {
+export const getHistoryMoodsByTeam = async ({ team, maxWeeks }) => {
   try {
     let response
     if (maxWeeks === undefined) {

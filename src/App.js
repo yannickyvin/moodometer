@@ -7,10 +7,10 @@ import Admin from './pages/Admin'
 const App = () => (
   <HashRouter>
     <Switch>
-      <Route exact path="/" component={Vote} />
-      <Route path="/report" component={Report} />
-      <Route path="/admin" component={Admin} />
-      <Redirect from="*" to="/" />
+      <Route exact path='/' component={Vote} />
+      <Route path='/report' component={Report} />
+      <Route path='/admin' component={Admin} />
+      <Redirect from='*' to='/' />
     </Switch>
   </HashRouter>
 )
