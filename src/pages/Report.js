@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import queryString from 'query-string'
-import { getWeek } from 'date-fns'
+import { getWeek, getYear } from 'date-fns'
 import { getTodayMoodsByTeam, getHistoryMoodsByTeam, getTeamName } from '../moodClient'
 import { MOOD, REPORT_MAX_WEEKS, LABELS, IS_ACTIVATED } from '../config/config'
 import { ReportContainer, ReportToday, ReportTrendByDay, ReportTrendByWeek, DailyInformations, LastInformations } from '../components/ChartReport'
@@ -86,25 +86,31 @@ class Report extends Component {
   }
 
   createWeekReport = (moods) => {
-    const weekRate = new Map()
+    const weekRate = []
 
     moods.forEach((mood) => {
       const date = new Date(mood.day)
       const week = getWeek(date)
-      if (weekRate.size === 0 || !weekRate.has(week)) {
-        weekRate.set(week, { count: 1, average: mood.rate })
+      const year = getYear(date)
+
+      const found = weekRate.find(element => (element.week === week) && (element.year === year))
+
+      if (found) {
+        found.average = ((found.average * found.count + mood.rate) / (found.count + 1)).toFixed(1)
+        found.count++
       } else {
-        let { count, average } = weekRate.get(week)
-        average = ((average * count + mood.rate) / (count + 1)).toFixed(1)
-        count++
-        weekRate.set(week, { count, average })
+        weekRate.push({
+          week,
+          year,
+          count: 1,
+          average: mood.rate
+        })
       }
     })
 
-    const arrayWeekRate = Array.from(weekRate)
-    arrayWeekRate.sort((a, b) => (a[0] - b[0]))
+    weekRate.sort((a, b) => ((a.year * 100 + a.week) - (b.year * 100 + b.week)))
 
-    return arrayWeekRate
+    return weekRate
   }
 
   render () {

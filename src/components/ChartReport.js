@@ -140,16 +140,15 @@ ReportTrendByDay.propTypes = {
 }
 
 export const ReportTrendByWeek = ({ reportDatas }) => {
-  const [NUMWEEK, DATA] = [0, 1]
   if ((!reportDatas) || (reportDatas.length === 0)) return null
 
   const data = {
-    labels: reportDatas.map(week => ('S' + week[NUMWEEK])),
+    labels: reportDatas.map(element => ('S' + element.week)),
     datasets: [{
       label: 'Moyenne de la semaine',
       backgroundColor: 'rgb(255, 99, 132)',
       borderColor: 'rgb(255, 99, 132)',
-      data: reportDatas.map(week => week[DATA].average)
+      data: reportDatas.map(element => element.average)
     }]
   }
 
