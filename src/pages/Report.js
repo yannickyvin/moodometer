@@ -90,8 +90,13 @@ class Report extends Component {
 
     moods.forEach((mood) => {
       const date = new Date(mood.day)
-      const week = getWeek(date)
-      const year = getYear(date)
+      let week = getWeek(date)
+      let year = getYear(date)
+
+      if ((date >= new Date('2019-12-30')) && (date <= new Date('2020-01-01'))) {
+        week = 1
+        year = 2020
+      }
 
       const found = weekRate.find(element => (element.week === week) && (element.year === year))
 
