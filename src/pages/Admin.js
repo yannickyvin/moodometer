@@ -60,11 +60,20 @@ ListOfTeams.propTypes = {
 
 const DetailTeamForm = (props) => {
   const port = window.location.port === undefined ? '' : `:${window.location.port}`
-  const urlVote = `${window.location.protocol}//${window.location.hostname}${port}/#/?team=${props.team.publicid}`
+  const path = window.location.path === undefined ? '/' : `:${window.location.path}`
+  const urlVote = `${window.location.protocol}//${window.location.hostname}${port}${path}#/?team=${props.team.publicid}`
   const urlRapport = `/report/?team=${props.team.publicid}`
 
   const deleteTeam = () => {
     props.onTeamDelete()
+  }
+
+  const copyUrlVote = () => {
+    const urlVote = document.getElementById('urlVote')
+    console.log(urlVote)
+    urlVote.select()
+    document.execCommand('copy')
+    props.onCopyText()
   }
 
   return (
@@ -75,8 +84,8 @@ const DetailTeamForm = (props) => {
       <div className='small'>
         Identifiant public : {props.team.publicid}
       </div>
-      <div className='small'>
-        Url : {urlVote}
+      <div className='small my-3'>
+        Url à transmettre : <small><input type='text' id='urlVote' value={urlVote} readOnly /></small> <button className='btn btn-secondary mx-1' onClick={copyUrlVote}>Copier</button>
       </div>
       <div>
         <Link to={urlRapport}>
@@ -89,14 +98,12 @@ const DetailTeamForm = (props) => {
 }
 
 DetailTeamForm.propTypes = {
-  team: PropTypes.string,
-  onTeamDelete: PropTypes.func
+  team: PropTypes.object,
+  onTeamDelete: PropTypes.func,
+  onCopyText: PropTypes.func
 }
 
 class Admin extends Component {
-  propTypes = {
-    location: PropTypes.object
-  }
 
   state = {
     currentTeam: {},
@@ -149,6 +156,13 @@ class Admin extends Component {
     })
   }
 
+  handleCopyText = async () => {
+    this.setState({
+      showToast: true,
+      messageToast: 'Copie dans presse-papier effectué'
+    })
+  }
+
   handleConfirmDeleteTeam = async () => {
     await deleteTeam(this.state.currentTeam)
     this.setState({
@@ -168,7 +182,7 @@ class Admin extends Component {
           <AddTeamForm onValidate={this.handleInsertTeam} />
           <ListOfTeams teams={this.state.teams} teamSelected={this.state.currentTeam} onTeamChange={this.handleSelectTeam} />
           {this.state.currentTeam.nom !== undefined &&
-            <DetailTeamForm team={this.state.currentTeam} onTeamDelete={this.handleDeleteTeam} />}
+            <DetailTeamForm team={this.state.currentTeam} onTeamDelete={this.handleDeleteTeam} onCopyText={this.handleCopyText} />}
           <Toast
             style={{
               position: 'absolute',
@@ -202,6 +216,10 @@ class Admin extends Component {
       </Layout>
     )
   }
+}
+
+Admin.propTypes = {
+  location: PropTypes.object
 }
 
 export default Admin
