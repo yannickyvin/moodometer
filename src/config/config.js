@@ -27,3 +27,5 @@ export const IS_ACTIVATED = {
   reportByWeek: true,
   reportLastInformations: true
 }
+
+export const GOOGLE_CLIENT_ID = '749885885691-mbmq26ndov6bnlmj2e9jmev83h8ieqjt.apps.googleusercontent.com'
