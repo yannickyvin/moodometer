@@ -13,3 +13,11 @@ CREATE TABLE team (
   nom text NOT NULL,
   publicid text NOT NULL
 );
+
+CREATE TABLE login (
+	id serial,
+  email text CONSTRAINT email_unique UNIQUE,
+  name text,
+  social_id text,
+  social_token text
+);

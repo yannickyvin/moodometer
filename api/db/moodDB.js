@@ -50,5 +50,14 @@ module.exports = {
   deleteTeam: (params) => {
     const text = 'delete from team where publicid=$1'
     return pool.query(text, params)
+  },
+  getLoginAndTeam: (params) => {
+    const text = `select login.email as email, login.name as username, login.social_id as socialid, login.social_token as token, 
+    team.nom as teamname, team.publicid as teamid from login left join team ON login.email = team.owner where login.email=$1`
+    return pool.query(text, params)
+  },
+  insertLogin: (params) => {
+    const text = 'insert into login (email, name, social_id, social_token) values ($1, $2, $3, $4) on conflict on constraint email_unique do update set name=$2, social_id=$3, social_token=$3'
+    return pool.query(text, params)
   }
 }
