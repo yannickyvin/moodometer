@@ -81,7 +81,9 @@ const InputFormMood = ({ onInputChange, onEmojiClick, inputInformation }) => {
 }
 
 InputFormMood.propTypes = {
-  onInputChange: PropTypes.func
+  onInputChange: PropTypes.func,
+  onEmojiClick: PropTypes.func, 
+  inputInformation: PropTypes.string
 }
 
 class Vote extends Component {

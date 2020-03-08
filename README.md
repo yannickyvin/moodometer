@@ -62,6 +62,8 @@ DEFAULT_TEAM=default
 PUBLIC_URL="/mood"
 # Your domain name
 REACT_APP_API_URL="https://domain.name"
+# admin page code
+REACT_APP_ADMIN_PWD="<your code>"
 
 ```
 ### Front configuration - DEV ENVIRONMENT
@@ -69,6 +71,7 @@ REACT_APP_API_URL="https://domain.name"
 ```
 PUBLIC_URL="http://localhost:3000"
 REACT_APP_API_URL="http://localhost:8400"
+REACT_APP_ADMIN_PWD="admin"
 
 ```
 

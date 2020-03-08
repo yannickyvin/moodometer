@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Bar, Doughnut } from 'react-chartjs-2'
-import { MOOD } from '../config/config.js'
+import { MOOD } from '../../config/config.js'
 
 export const ReportContainer = ({ activate, label, children }) => {
   return (
