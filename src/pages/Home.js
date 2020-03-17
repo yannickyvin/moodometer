@@ -21,6 +21,7 @@ class Home extends Component {
 
   handleGoogleResponse = (response) => {
     console.log('handleGoogleResponse')
+    // eslint-disable-next-line no-undef
     const tokenBlob = new Blob([JSON.stringify({ access_token: response.accessToken }, null, 2)], { type: 'application/json' })
     const options = {
       method: 'POST',
@@ -28,6 +29,7 @@ class Home extends Component {
       mode: 'cors',
       cache: 'default'
     }
+    // eslint-disable-next-line no-undef
     fetch(process.env.REACT_APP_API_URL + '/authent/google', options).then(r => {
       const token = r.headers.get('x-auth-token')
       console.log('r', r)

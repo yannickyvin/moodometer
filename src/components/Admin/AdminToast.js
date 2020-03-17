@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { Toast } from 'react-bootstrap'
 
 export const AdminToast = (props) => {
-
   return (
     <Toast
       style={{

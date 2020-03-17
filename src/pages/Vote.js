@@ -82,7 +82,7 @@ const InputFormMood = ({ onInputChange, onEmojiClick, inputInformation }) => {
 
 InputFormMood.propTypes = {
   onInputChange: PropTypes.func,
-  onEmojiClick: PropTypes.func, 
+  onEmojiClick: PropTypes.func,
   inputInformation: PropTypes.string
 }
 

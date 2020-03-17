@@ -8,7 +8,7 @@ import { AdminModal } from '../components/Admin/AdminModal'
 import { AdminControl } from '../components/Admin/AdminControl'
 import { getAllTeams, postTeam, deleteTeam } from '../moodClient'
 import uuid from 'uuid/v1'
-import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types'
 
 const accessPwd = process.env.REACT_APP_ADMIN_PWD
 
@@ -121,6 +121,10 @@ class Admin extends Component {
       </Layout>
     )
   }
+}
+
+Admin.propTypes = {
+  history: PropTypes.object
 }
 
 export default Admin

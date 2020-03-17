@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { Form } from 'react-bootstrap'
 
 export const AdminControl = (props) => {
-
   return (
     <Form.Group controlId='formBasicPassword'>
       <Form.Label>Admin Code</Form.Label>
