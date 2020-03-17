@@ -53,8 +53,8 @@ ListOfTeams.propTypes = {
 }
 
 export const DetailTeamForm = (props) => {
-  const port = window.location.port === undefined ? '' : `:${window.location.port}`
-  const path = props.location.pathname === undefined ? '/' : `:${props.location.pathname}`
+  const port = ((window.location.port === undefined) || (window.location.port === '')) ? '' : `:${window.location.port}`
+  const path = window.location.pathname === undefined ? '/' : `${window.location.pathname}`
   const urlVote = `${window.location.protocol}//${window.location.hostname}${port}${path}#/?team=${props.team.publicid}`
   const urlRapport = `/report/?team=${props.team.publicid}`
 
@@ -94,6 +94,5 @@ export const DetailTeamForm = (props) => {
 DetailTeamForm.propTypes = {
   team: PropTypes.object,
   onTeamDelete: PropTypes.func,
-  onCopyText: PropTypes.func,
-  location: PropTypes.object
+  onCopyText: PropTypes.func
 }
