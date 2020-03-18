@@ -69,7 +69,7 @@ const InputFormMood = ({ onInputChange, onEmojiClick, inputInformation }) => {
             <u>{LABELS.informationUnderline}</u>{LABELS.informationNext}
           </span>
           <img src='right-arrow.svg' className='arrow mx-1' alt='arrow' />
-          <input className='inputinformation mx-2 px-3' aria-describedby='wordhelp' onChange={handleChangeInput} style={{ backgroundColor: backgroundInput, border: border }} value={inputInformation} />
+          <input className='inputinformation mx-2 px-3' aria-describedby='wordhelp' maxLength='60' onChange={handleChangeInput} style={{ backgroundColor: backgroundInput, border: border }} value={inputInformation} />
           <img onClick={handleEmojiPicker} className='emoji-switcher' src='emoji.png' />
         </div>
         <div className={(isEmojiPicker ? 'emoji-pick-visible' : 'emoji-pick-hidden')}>
