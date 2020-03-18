@@ -1,6 +1,5 @@
 html,
-body,
-#root {
+body {
   height: 100%;
   font-family: "Lato", Sans-serif;
 }
@@ -21,13 +20,6 @@ h2 {
   color: rgb(211, 247, 255);
 }
 
-.cont {
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-attachment: fixed;
-  min-height: 100vh;
-}
-
 .home-header {
   display: flex;
   flex-flow: row wrap;
@@ -36,29 +28,24 @@ h2 {
   background-color: #555555;
   padding-top: 10px;
   margin-bottom: 50px;
+  color: white;
 }
 
 .header-link {
   display: inline-block;
-  color: white;
-}
-/*
-.home-content {
-  display: flex;
-  flex-flow: column wrap;
-  align-items: center;
 }
 
-.home-content-item {
+.home-container {
   display: flex;
-  flex-flow: row wrap;
-  align-items: center;
+  justify-content: center;
 }
-*/
 
 .home-content {
   padding: 20px 80px;
+  max-width: 1280px;
   display: grid;
+  vertical-align: center;
+  align-content: end;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: auto;
   justify-items: center;
@@ -80,22 +67,7 @@ input.login_button {
   /* Etc. */
 }
 
-@media only screen and (max-width: 768px) {
-  .home-content {
-    grid-template-columns: 1fr;
-    grid-template-areas:
-    "bloc1"
-    "bloc2"
-    "bloc4"
-    "bloc3"
-    "bloc5"
-    "bloc6"
-    "bloc8"
-    "bloc7"
-    "bloc9"
-    "bloc10";
-  }
-}
+
 
 .home-bloc-1 {
   grid-area: bloc1;
@@ -115,6 +87,22 @@ input.login_button {
 .home-test-link {
   margin-top : 30px;
   font-size: 34px;
+}
+
+.home-div-test {
+  text-align: center;
+  box-sizing: border-box;
+  box-shadow: 1px 1px 1px grey;
+  border: solid;
+  border-radius: 10px;
+  border-color: #3d7be5;
+  padding: 5px 5px;
+  margin: 20px;
+}
+
+a:link, a:visited, a:hover, a:active {
+  text-decoration: none;
+  color: #3d7be5;
 }
 
 .home-bloc-3 {
@@ -173,103 +161,35 @@ input.login_button {
   width: 36px;
 }
 
-.app {
-  background: rgba(104, 104, 104, 0.7);
-  background: linear-gradient(to right, rgba(255, 255, 255, 0.1),  rgba(104, 104, 104, 0.7),  rgba(104, 104, 104, 0.8) 50%, rgba(104, 104, 104, 0.7), rgba(255, 255, 255, 0.1));
-
-  font-size: calc(14px + 3vmin);
-  color: white;
-  padding-bottom: 10px;
-  width: 80vw;
-  min-height: 100vh
-}
-
-.italic {
-  font-style: italic;
-}
-
-/* Extends react-emoji-picker css */
-
-li.emoji {
-  width: 35px;
-  height: 35px;
-}
-
-.skin-tones-list {
-  display: none;
-}
-
-.emoji-search {
-  font-size: 1rem;
-}
-
-.btn-xl {
-  font-size: calc(14px + 3vmin);
-}
-
-.emoji {
-  width: 100px;
-}
-
-.inputinformation {
-  width: 25%;
-  height: 30px;
-  display: inline-block;
-  font-size: 0.4em;
-  box-sizing: content-box;
-  border: 1;
-}
-
-.inputinformation:hover {
-  background-color: #EEEEEE;
-}
-
-.inputlabelinformation {
-  font-size: 0.4em;
-  width: 50%;
-}
-
-.emoji-switcher:hover {
-  cursor: pointer;
-}
-
-.emoji-pick-hidden {
-  display: none;
-}
-
-.emoji-pick-visible {
-  display: flex;
-  justify-content: flex-end;
-  right: 0px;
-}
-
-.badgemood {
-  border: solid;
-  border-radius: 20px;
-  font-size: 0.6em;
-  background-color: red;
-  padding: 0 6px;
-}
-
-.arrow {
-  width: 5%;
-} 
-
-.form {
-  background-color: rgb(238, 238, 238);
-  border-radius: 20px;
-  border: solid;
-  border-color: black;
-  max-width: 650px;
-}
-
-.toastadmin {
-  color: black;
-}
-
 @media only screen and (max-width: 768px) {
-  /* For mobile phones: */
-  .app {
-    width: 95vw;
+  .home-content {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+    "bloc1"
+    "bloc2"
+    "bloc4"
+    "bloc3"
+    "bloc5"
+    "bloc6"
+    "bloc8"
+    "bloc7"
+    "bloc9"
+    "bloc10";
+  }
+
+  .home-test-link {
+    margin-top : 10px;
+    font-size: 24px;
+  }
+
+  .home-div-test {
+    text-align: center;
+    box-sizing: border-box;
+    box-shadow: 1px 1px 1px grey;
+    border: solid;
+    border-radius: 10px;
+    border-color: #3d7be5;
+    padding: 5px 5px;
+    margin: 10px;
   }
 }
