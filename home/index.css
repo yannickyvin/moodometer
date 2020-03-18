@@ -23,7 +23,7 @@ h2 {
 .home-header {
   display: flex;
   flex-flow: row wrap;
-  justify-content: space-around;
+  justify-content: space-between;
   height: 50px;
   background-color: #555555;
   padding-top: 10px;
@@ -31,8 +31,27 @@ h2 {
   color: white;
 }
 
+.header-logo {
+  display: inline-block;
+  font-style: italic;
+  font-size: 1.2em;
+  font-weight: 800;
+  margin-left: 30px;
+  text-shadow: 0.1em 0.1em 0.1em black;
+}
+
 .header-link {
   display: inline-block;
+  margin: 0 60px;
+}
+
+.header-link > a:link, .header-link > a:visited, .header-link > a:hover, .header-link > a:active {
+  color: white;
+}
+
+.header-alpha {
+  font-size: .6em;
+  text-align: end;
 }
 
 .home-container {
@@ -93,16 +112,17 @@ input.login_button {
   text-align: center;
   box-sizing: border-box;
   box-shadow: 1px 1px 1px grey;
+  background-color: #3d7be5;
   border: solid;
   border-radius: 10px;
   border-color: #3d7be5;
-  padding: 5px 5px;
-  margin: 20px;
+  padding: 3px 5px;
+  margin: 30px 0 0 0;
 }
 
-a:link, a:visited, a:hover, a:active {
+.home-div-test > a:link, .home-div-test > a:visited, .home-div-test > a:hover, .home-div-test > a:active {
   text-decoration: none;
-  color: #3d7be5;
+  color: white;
 }
 
 .home-bloc-3 {
