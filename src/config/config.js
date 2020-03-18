@@ -1,5 +1,5 @@
 export const MOOD = {
-  defaultTeam: 'sushi',
+  defaultTeam: (process.env.REACT_APP_DEFAULT_TEAM === undefined) ? 'test' : process.env.REACT_APP_DEFAULT_TEAM,
   options: [
     { id: 'happy', label: 'Super', color: '#3fdb36', img: 'happy.svg', rate: 5 },
     { id: 'smiling', label: 'Bien', color: '#b4db36', img: 'smiling.svg', rate: 4 },
