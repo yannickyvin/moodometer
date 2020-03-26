@@ -1,11 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 
 const Header = ({ team }) => {
   return (
     <>
       <header>
-        <a className='header' href='https://github.com/yannickyvin/moodometer'>moodometer</a>
+        <Link className='header' to='admin'>Admin</Link>
       </header>
       <p className='font-weight italic'>Equipe : {team}</p>
     </>

@@ -2,11 +2,19 @@ html,
 body,
 #root {
   height: 100%;
+  font-family: "Lato", Sans-serif;
 }
 
 body {
   margin: 0;
   padding: 0;
+}
+
+h2 {
+  font-size: 38px;
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: -.5px;
 }
 
 .header, .footer {
@@ -18,6 +26,139 @@ body {
   background-size: cover;
   background-attachment: fixed;
   min-height: 100vh;
+}
+
+.home-header {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+  height: 50px;
+  background-color: #555555;
+  padding-top: 10px;
+  margin-bottom: 50px;
+}
+
+.header-link {
+  display: inline-block;
+  color: white;
+}
+/*
+.home-content {
+  display: flex;
+  flex-flow: column wrap;
+  align-items: center;
+}
+
+.home-content-item {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+}
+*/
+
+.home-content {
+  padding: 20px 80px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto;
+  justify-items: center;
+  align-items: center;
+  grid-row-gap: 55px;
+  grid-column-gap: 45px;
+  grid-template-areas:
+    "bloc1 bloc2"
+    "bloc3 bloc4"
+    "bloc5 bloc6"
+    "bloc7 bloc8"
+    "bloc9 bloc10";
+}
+
+input.login_button {
+  box-shadow: none;
+  border: none;
+  line-height: initial;
+  /* Etc. */
+}
+
+@media only screen and (max-width: 768px) {
+  .home-content {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+    "bloc1"
+    "bloc2"
+    "bloc4"
+    "bloc3"
+    "bloc5"
+    "bloc6"
+    "bloc8"
+    "bloc7"
+    "bloc9"
+    "bloc10";
+  }
+}
+
+.home-bloc-1 {
+  grid-area: bloc1;
+}
+
+.home-bloc-2 {
+  grid-area: bloc2;
+}
+
+.home-bloc-3 {
+  grid-area: bloc3;
+}
+
+.home-bloc-4 {
+  grid-area: bloc4;
+}
+
+.home-bloc-5 {
+  grid-area: bloc5;
+}
+
+.home-bloc-6 {
+  grid-area: bloc6;
+}
+
+.home-bloc-7 {
+  grid-area: bloc7;
+}
+
+.home-bloc-8 {
+  grid-area: bloc8;
+}
+
+.home-bloc-9 {
+  grid-area: bloc9;
+}
+
+.home-bloc-10 {
+  grid-area: bloc10;
+}
+
+.home-content-item-text {
+  color: #555555; 
+  font-size: 1.2rem;
+  line-height: 1.5;
+}
+
+.home-content-item-text h2 {
+  margin-bottom: 20px;
+}
+
+.home-content-item-image {
+  min-width: 300px;
+}
+
+.home-paragraphe-blue {
+  background-color: #0077CC;
+  color: #ffffff;
+}
+
+.home-paragraph-icon {
+  color: #0077CC;
+  width: 36px;
 }
 
 .app {
@@ -33,6 +174,21 @@ body {
 
 .italic {
   font-style: italic;
+}
+
+/* Extends react-emoji-picker css */
+
+li.emoji {
+  width: 35px;
+  height: 35px;
+}
+
+.skin-tones-list {
+  display: none;
+}
+
+.emoji-search {
+  font-size: 1rem;
 }
 
 .btn-xl {
@@ -59,6 +215,20 @@ body {
 .inputlabelinformation {
   font-size: 0.4em;
   width: 50%;
+}
+
+.emoji-switcher:hover {
+  cursor: pointer;
+}
+
+.emoji-pick-hidden {
+  display: none;
+}
+
+.emoji-pick-visible {
+  display: flex;
+  justify-content: flex-end;
+  right: 0px;
 }
 
 .badgemood {

@@ -1,5 +1,5 @@
 export const MOOD = {
-  defaultTeam: 'sushi',
+  defaultTeam: (process.env.REACT_APP_DEFAULT_TEAM === undefined) ? 'test' : process.env.REACT_APP_DEFAULT_TEAM,
   options: [
     { id: 'happy', label: 'Super', color: '#3fdb36', img: 'happy.svg', rate: 5 },
     { id: 'smiling', label: 'Bien', color: '#b4db36', img: 'smiling.svg', rate: 4 },
@@ -27,3 +27,5 @@ export const IS_ACTIVATED = {
   reportByWeek: true,
   reportLastInformations: true
 }
+
+export const GOOGLE_CLIENT_ID = '749885885691-mbmq26ndov6bnlmj2e9jmev83h8ieqjt.apps.googleusercontent.com'
