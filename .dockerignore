@@ -1,0 +1,5 @@
+node_modules
+pg
+api
+README.md
+docker-compose.yml

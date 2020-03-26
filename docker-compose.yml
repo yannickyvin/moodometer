@@ -1,0 +1,42 @@
+version: "3"
+services:
+  moodometer_api:
+    container_name: moodometer_api
+    build: ./api/
+    ports:
+      - "8400:8400"
+    depends_on:
+      - db  
+    environment:
+      NODE_ENV: development
+      DB_HOST: db
+      DB_DATABASENAME: mood
+      DB_USER: postgres
+      DB_PWD: password
+      DB_PORT: 5432
+      DEFAULT_TEAM: sushi
+  moodfront:
+    container_name: moodfront
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      PUBLIC_URL: http://localhost:3000
+      REACT_APP_API_URL: http://localhost:8400
+      REACT_APP_ADMIN_PWD: admin
+      REACT_APP_DEFAULT_TEAM: TEST
+  db:
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres 
+      POSTGRES_PASSWORD: password
+    volumes:
+      - ./pg/db_data:/var/lib/postgresql/data
+      - ./api/mood.sql:/docker-entrypoint-initdb.d/mood.sql
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
