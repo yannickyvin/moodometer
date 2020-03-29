@@ -1,7 +1,5 @@
 CREATE DATABASE mood;
-
-USE mood;
-
+\c mood;
 CREATE TABLE mood (
 	id serial,
   session text NOT NULL,

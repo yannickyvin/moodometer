@@ -23,13 +23,38 @@ module.exports = {
     const text = `select session, TO_CHAR(day, 'YYYY-MM-DD') as day, rate, team, information from mood where team=$1 and day > (now() - interval '${maxWeeks} week') order by mood.day`
     return pool.query(text, params)
   },
+  getMoodsByTeamsAndMaxWeeks: (teams, maxWeeks) => {
+    const paramsINOperator = []
+    for (let i = 1; i <= teams.length; i++) {
+      paramsINOperator.push('$' + i)
+    }
+    const text = `select session, TO_CHAR(day, 'YYYY-MM-DD') as day, rate, team, information from mood where team in (${paramsINOperator.join(',')}) and day > (now() - interval '${maxWeeks} week') order by mood.day`
+    return pool.query(text, teams)
+  },
   getAllMoodsByTeam: (params) => {
     const text = "select session, TO_CHAR(day, 'YYYY-MM-DD') as day, rate, team, information from mood where team=$1 order by mood.day"
     return pool.query(text, params)
   },
+  getAllMoodsByTeams: (teams) => {
+    const paramsINOperator = []
+    for (let i = 1; i <= teams.length; i++) {
+      paramsINOperator.push('$' + i)
+    }
+    const text = `select session, TO_CHAR(day, 'YYYY-MM-DD') as day, rate, team, information from mood where team in (${paramsINOperator.join(',')}) order by mood.day`
+    return pool.query(text, teams)
+  },
   getMoodsByTeamAndDay: (params) => {
     const text = "select session, TO_CHAR(day, 'YYYY-MM-DD') as day, rate, team, information from mood where team=$1 and day=TO_DATE($2, 'YYYY-MM-DD')"
     return pool.query(text, params)
+  },
+  getMoodsByTeamsAndDay: (teams, date) => {
+    const paramsINOperator = []
+    for (let i = 1; i <= teams.length; i++) {
+      paramsINOperator.push('$' + (i + 1))
+    }
+    const text = `select session, TO_CHAR(day, 'YYYY-MM-DD') as day, rate, team, information from mood where team in (${paramsINOperator.join(',')}) and day=TO_DATE($1, 'YYYY-MM-DD')`
+    console.log('text', text)
+    return pool.query(text, [date, ...teams])
   },
   insertMood: (params) => {
     const text = "insert into mood (session, day, rate, team, information) values ($1, TO_DATE($2, 'YYYY-MM-DD'), $3, $4, $5) on conflict on constraint session_day_team do update set rate=$3, information=$5"

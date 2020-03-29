@@ -58,7 +58,7 @@ class Home extends Component {
           </div>
           <div>
             <button onClick={this.handleLogout} className='button'>
-                            Log out
+              Log out
             </button>
           </div>
         </div>
@@ -120,7 +120,7 @@ class Home extends Component {
             <h2>Il y a un suivi des humeurs ?</h2>
             <p className='description'>
               <img className='home-paragraph-icon' src='timeline-24px.svg' /> Oui, des rapports sont générés. Ils sont visibles par toute l'équipe.
-                Rapport quotidien. Evolution hebdomadaire de l'humeur. Synthèses des commentaires des dernières semaines.
+              Rapport quotidien. Evolution hebdomadaire de l'humeur. Synthèses des commentaires des dernières semaines.
             </p>
           </div>
           <div className='home-content-item-image home-bloc-6'>

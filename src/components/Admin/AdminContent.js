@@ -75,9 +75,6 @@ export const DetailTeamForm = (props) => {
       <div className='small'>
         Nom : {props.team.nom}
       </div>
-      <div className='small'>
-        Identifiant public : {props.team.publicid}
-      </div>
       <div className='small my-3'>
         Url à transmettre : <small><input type='text' id='urlVote' value={urlVote} readOnly /></small> <button className='btn btn-secondary mx-1' onClick={copyUrlVote}>Copier</button>
       </div>

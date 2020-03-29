@@ -19,6 +19,23 @@ router.get('/', async function (req, res, next) {
   res.jsonp(moods.rows)
 })
 
+router.post('/teams/list', async function (req, res) {
+  const date = req.body.date
+  const teams = ((req.body.teams === undefined) || (req.body.teams === '')) ? [config.DEFAULT_TEAM] : req.body.teams
+  const maxWeeks = ((req.body.maxweeks === undefined) || (req.body.maxweeks === '')) ? 1 : req.body.maxweeks
+  let moods
+
+  if ((req.body.date !== undefined) && (req.body.date !== '')) {
+    moods = await db.getMoodsByTeamsAndDay(teams, date)
+  } else if ((req.body.maxweeks !== undefined) && (req.body.maxweeks !== '')) {
+    moods = await db.getMoodsByTeamsAndMaxWeeks(teams, maxWeeks)
+  } else {
+    moods = await db.getAllMoodsByTeams(teams)
+  }
+
+  res.jsonp(moods.rows)
+})
+
 router.post('/', async function (req, res) {
   const session = req.body.session
   const day = req.body.day

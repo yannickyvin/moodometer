@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import queryString from 'query-string'
-import { getWeek, getYear } from 'date-fns'
-import { getTodayMoodsByTeam, getHistoryMoodsByTeam, getTeamName } from '../moodClient'
+
+import { getTodayMoodsByTeam, getHistoryMoodsByTeam, getTeamName } from '../services/moodClientService'
+import { createTodayReport, createCompleteReport, createWeekReport } from '../services/chartService'
 import { MOOD, REPORT_MAX_WEEKS, LABELS, IS_ACTIVATED } from '../config/config'
 import { ReportContainer, ReportToday, ReportTrendByDay, ReportTrendByWeek, DailyInformations, LastInformations } from '../components/Report/ChartReport'
 import Layout from '../components/Layout'
@@ -43,79 +44,11 @@ class Report extends Component {
     const historyLastWeeksMoods = await getHistoryMoodsByTeam({ team, maxWeeks: REPORT_MAX_WEEKS })
     const historyAllMoods = await getHistoryMoodsByTeam({ team })
 
-    const todayReport = this.createTodayReport(todayMoods)
-    const completeReport = this.createCompleteReport(historyLastWeeksMoods)
-    const weekReport = this.createWeekReport(historyAllMoods)
+    const todayReport = createTodayReport(todayMoods)
+    const completeReport = createCompleteReport(historyLastWeeksMoods)
+    const weekReport = createWeekReport(historyAllMoods)
 
     this.setState({ todayMoods, historyLastWeeksMoods, todayReport, completeReport, weekReport, team })
-  }
-
-  createTodayReport = (moods) => {
-    let todayReport = [...MOOD.options]
-
-    todayReport = todayReport.map((option) => ({ ...option, count: 0 }))
-    if (moods !== null && moods.length !== undefined) {
-      moods.forEach((mood) => {
-        const rateOptionFound = todayReport.find(elt => elt.rate === mood.rate)
-        rateOptionFound.count++
-      })
-    }
-    return todayReport
-  }
-
-  createCompleteReport = (moods) => {
-    let completeReport = [...MOOD.options]
-    completeReport = completeReport.map((option) => ({ ...option, datas: [] }))
-
-    if (moods !== null && moods.length !== undefined) {
-      moods.forEach((mood) => {
-        // is day already known ?
-        const found = completeReport[0].datas.findIndex((data) => (data.day === mood.day))
-
-        if (found === -1) {
-          // day new => add day to each option and init count
-          completeReport = completeReport.map((option) => ({ ...option, datas: [...option.datas, { day: mood.day, count: mood.rate === option.rate ? 1 : 0 }] }))
-        } else {
-          // day not new => increment count on specific option
-          const rateOptionFound = completeReport.find(elt => elt.rate === mood.rate)
-          rateOptionFound.datas[found].count += 1
-        }
-      })
-    }
-    return completeReport
-  }
-
-  createWeekReport = (moods) => {
-    const weekRate = []
-
-    moods.forEach((mood) => {
-      const date = new Date(mood.day)
-      let week = getWeek(date)
-      let year = getYear(date)
-
-      if ((date >= new Date('2019-12-30')) && (date <= new Date('2020-01-01'))) {
-        week = 1
-        year = 2020
-      }
-
-      const found = weekRate.find(element => (element.week === week) && (element.year === year))
-
-      if (found) {
-        found.average = ((found.average * found.count + mood.rate) / (found.count + 1)).toFixed(1)
-        found.count++
-      } else {
-        weekRate.push({
-          week,
-          year,
-          count: 1,
-          average: mood.rate
-        })
-      }
-    })
-
-    weekRate.sort((a, b) => ((a.year * 100 + a.week) - (b.year * 100 + b.week)))
-
-    return weekRate
   }
 
   render () {

@@ -11,10 +11,10 @@ export const AdminModal = (props) => {
       <Modal.Body>{props.messageModal}</Modal.Body>
       <Modal.Footer>
         <Button variant='secondary' onClick={props.onCancel}>
-                Annuler
+          Annuler
         </Button>
         <Button variant='primary' onClick={props.onConfirm}>
-                Confirmer
+          Confirmer
         </Button>
       </Modal.Footer>
     </Modal>

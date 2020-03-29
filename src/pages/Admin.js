@@ -2,15 +2,15 @@ import React, { Component } from 'react'
 import Layout from '../components/Layout'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import { ConnectedContext } from '../components/ConnectedContext'
 import { AddTeamForm, ListOfTeams, DetailTeamForm } from '../components/Admin/AdminContent'
 import { AdminToast } from '../components/Admin/AdminToast'
 import { AdminModal } from '../components/Admin/AdminModal'
 import { AdminControl } from '../components/Admin/AdminControl'
-import { getAllTeams, postTeam, deleteTeam } from '../moodClient'
+import { getAllTeams, postTeam, deleteTeam } from '../services/moodClientService'
 import uuid from 'uuid/v1'
 import PropTypes from 'prop-types'
-
-const accessPwd = process.env.REACT_APP_ADMIN_PWD
+import { Link } from 'react-router-dom'
 
 class Admin extends Component {
   state = {
@@ -19,10 +19,10 @@ class Admin extends Component {
     showToast: false,
     messageToast: '',
     showModal: false,
-    messageModal: '',
-    accessPwd: '',
-    isAuthorized: false
+    messageModal: ''
   }
+
+  static contextType = ConnectedContext
 
   componentDidMount = () => {
     this.refreshTeams()
@@ -84,23 +84,16 @@ class Admin extends Component {
     this.refreshTeams()
   }
 
-  handleCheckControl = (value) => {
-    if (value === accessPwd) {
-      this.setState({
-        isAuthorized: true
-      })
-    }
-  }
-
   render () {
-    const isAuthorized = this.state.isAuthorized
-
     return (
       <Layout>
-        {isAuthorized
+        {this.context.isConnected
           ? (
             <div className='app h-100 d-flex flex-column align-items-center justify-content-around'>
               <Header team='Administration' />
+              <Link to='/adminreport'>
+                Voir le rapport cumulé
+              </Link>
               <AddTeamForm onValidate={this.handleInsertTeam} />
               <ListOfTeams teams={this.state.teams} teamSelected={this.state.currentTeam} onTeamChange={this.handleSelectTeam} />
 
@@ -114,7 +107,11 @@ class Admin extends Component {
               <header>
                 <div className='header' onClick={() => this.props.history.goBack()}>Retour</div>
               </header>
-              <AdminControl onInputChange={this.handleCheckControl} />
+              <ConnectedContext.Consumer>
+                {({ handleCheckControl }) => (
+                  <AdminControl onInputChange={handleCheckControl} />
+                )}
+              </ConnectedContext.Consumer>
               <Footer link='/' libelle='Home' search='/' />
             </div>
           )}

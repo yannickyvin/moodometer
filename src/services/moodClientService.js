@@ -1,6 +1,17 @@
 /* eslint-disable no-undef */
-import { dateOfDay } from './service.js'
+import { dateOfDay } from './dateService'
 const apiUrl = process.env.REACT_APP_API_URL
+
+export const getAllMoods = async () => {
+  try {
+    const response = await fetch(`${apiUrl}/moods`)
+    const content = await response.json()
+    return content
+  } catch (e) {
+    console.log(e)
+    return null
+  }
+}
 
 export const getTodayMoodsByTeam = async (team) => {
   try {
@@ -13,9 +24,40 @@ export const getTodayMoodsByTeam = async (team) => {
   }
 }
 
-export const getAllMoods = async () => {
+export const getTodayMoodsByTeams = async teams => {
   try {
-    const response = await fetch(`${apiUrl}/moods`)
+    const response = await fetch(`${apiUrl}/moods/teams/list`, {
+      method: 'POST',
+      mode: 'cors',
+      body: JSON.stringify({ teams, date: dateOfDay('YYYY-MM-DD')}),
+      headers: new Headers({
+        'Content-Type': 'application/json'
+      })
+    })
+    const content = await response.json()
+    return content
+  } catch (e) {
+    console.log(e)
+    return null
+  }
+}
+
+export const getHistoryMoodsByTeams = async ({ teams, maxWeeks }) => {
+  try {
+    let body
+    if (maxWeeks === undefined) {
+      body = JSON.stringify({ teams })
+    } else {
+      body = JSON.stringify({ teams, maxweeks: maxWeeks })
+    }
+    const response = await fetch(`${apiUrl}/moods/teams/list`, {
+      method: 'POST',
+      mode: 'cors',
+      body,
+      headers: new Headers({
+        'Content-Type': 'application/json'
+      })
+    })
     const content = await response.json()
     return content
   } catch (e) {

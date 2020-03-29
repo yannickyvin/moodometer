@@ -1,9 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { dayOfYear } from '../service'
+import { dayOfYear } from '../services/dateService'
+
+const background = ((process.env.REACT_APP_PICSUM_BACKGROUND === undefined) || process.env.REACT_APP_PICSUM_BACKGROUND === true ) ? `url('https://picsum.photos/id/${dayOfYear()}/1920/1200')` : `url('fab${dayOfYear() % 52}.jpg')`
 
 const Layout = ({ children }) => (
-  <div className='cont w-100 d-flex justify-content-center' style={{ backgroundImage: `url('fab${dayOfYear() % 52}.jpg')` }}>
+  <div className='cont w-100 d-flex justify-content-center' style={{ backgroundImage: background }}>
     {children}
   </div>
 )

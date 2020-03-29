@@ -53,14 +53,14 @@ Information.propTypes = {
   color: PropTypes.string
 }
 
-const getColorFromRate = (rate) => MOOD.options.find((x) => x.rate === rate).color
+const getColorFromRate = (rate) => MOOD.options.find((option) => option.rate === rate).color
 
 export const DailyInformations = ({ moods }) => {
   return (
     <div className='d-flex flex-row flex-wrap my-3'>
-      {moods.map((x) => {
-        return (x.information !== undefined && x.information !== null && x.information.length > 0 &&
-          <Information key={x.session} information={x.information} color={getColorFromRate(x.rate)} />)
+      {moods.map((mood) => {
+        return (mood.information !== undefined && mood.information !== null && mood.information.length > 0 &&
+          <Information key={mood.session} information={mood.information} color={getColorFromRate(mood.rate)} />)
       })}
     </div>
   )
@@ -76,9 +76,9 @@ export const LastInformations = ({ moods }) => {
       {MOOD.options.map((option) => {
         return (
           <div key={option.rate} className='d-flex flex-row flex-wrap my-1'>
-            {moods.map((x) => {
-              return (x.information !== undefined && x.information !== null && x.information.length > 0 && x.rate === option.rate &&
-                <Information key={x.session + x.day} information={x.information} color={getColorFromRate(x.rate)} />)
+            {moods.map((mood) => {
+              return (mood.information !== undefined && mood.information !== null && mood.information.length > 0 && mood.rate === option.rate &&
+                <Information key={mood.session + mood.day} information={mood.information} color={getColorFromRate(mood.rate)} />)
             })}
           </div>
         )
