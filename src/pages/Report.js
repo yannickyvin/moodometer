@@ -11,10 +11,7 @@ import Header from '../components/Header'
 import Footer from '../components/Footer'
 
 class Report extends Component {
-  propTypes = {
-    location: PropTypes.object
-  }
-
+  abortController = new AbortController()
   state = {
     todayMoods: [],
     todayReport: [],
@@ -33,22 +30,29 @@ class Report extends Component {
     const parsed = queryString.parse(this.props.location.search)
 
     let team
-    if (parsed.team === undefined) {
-      team = MOOD.defaultTeam
-    } else {
-      const teamName = await getTeamName(parsed.team)
-      team = teamName === undefined ? MOOD.defaultTeam : teamName
+    try {
+      if (parsed.team === undefined) {
+        team = MOOD.defaultTeam
+      } else {
+        const teamName = await getTeamName(parsed.team, this.abortController.signal)
+        team = teamName === undefined ? MOOD.defaultTeam : teamName
+      }
+      const todayMoods = await getTodayMoodsByTeam(team, this.abortController.signal)
+      const historyLastWeeksMoods = await getHistoryMoodsByTeam({ team, maxWeeks: REPORT_MAX_WEEKS }, this.abortController.signal)
+      const historyAllMoods = await getHistoryMoodsByTeam({ team }, this.abortController.signal)
+      
+      const todayReport = (todayMoods !== null) ? createTodayReport(todayMoods) : []
+      const completeReport = (historyLastWeeksMoods !== null) ? createCompleteReport(historyLastWeeksMoods) : []
+      const weekReport = (historyAllMoods !== null) ? createWeekReport(historyAllMoods) : []
+
+      this.setState({ todayMoods, historyLastWeeksMoods, todayReport, completeReport, weekReport, team })
+    } catch (e) {
+      console.log(e)
     }
+  }
 
-    const todayMoods = await getTodayMoodsByTeam(team)
-    const historyLastWeeksMoods = await getHistoryMoodsByTeam({ team, maxWeeks: REPORT_MAX_WEEKS })
-    const historyAllMoods = await getHistoryMoodsByTeam({ team })
-
-    const todayReport = createTodayReport(todayMoods)
-    const completeReport = createCompleteReport(historyLastWeeksMoods)
-    const weekReport = createWeekReport(historyAllMoods)
-
-    this.setState({ todayMoods, historyLastWeeksMoods, todayReport, completeReport, weekReport, team })
+  componentWillUnmount () {
+    console.log('report unmount')
   }
 
   render () {
@@ -66,7 +70,7 @@ class Report extends Component {
             <div>
               <p className='font-weight-light'>{LABELS.today}</p>
             </div>
-            <ReportContainer activate={IS_ACTIVATED.reportByDay} label={LABELS.trendByDayReport}>
+            <ReportContainer activate={IS_ACTIVATED.reportByDay} label={LABELS.trendByDayReport(3)}>
               <ReportTrendByDay reportDatas={this.state.completeReport} />
             </ReportContainer>
 
@@ -74,7 +78,7 @@ class Report extends Component {
               <ReportTrendByWeek reportDatas={this.state.weekReport} />
             </ReportContainer>
 
-            <ReportContainer activate={IS_ACTIVATED.reportLastInformations} label={LABELS.lastInformationReport}>
+            <ReportContainer activate={IS_ACTIVATED.reportLastInformations} label={LABELS.lastInformationReport(3)}>
               <LastInformations moods={this.state.historyLastWeeksMoods} />
             </ReportContainer>
           </div>
@@ -85,6 +89,10 @@ class Report extends Component {
 
     )
   }
+}
+
+Report.propTypes = {
+  location: PropTypes.object
 }
 
 export default Report

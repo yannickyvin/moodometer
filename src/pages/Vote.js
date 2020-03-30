@@ -73,7 +73,7 @@ const InputFormMood = ({ onInputChange, onEmojiClick, inputInformation }) => {
           <img onClick={handleEmojiPicker} className='emoji-switcher' src='emoji.png' />
         </div>
         <div className={(isEmojiPicker ? 'emoji-pick-visible' : 'emoji-pick-hidden')}>
-          <Picker onEmojiClick={handleEmojiClick} />
+          {(isEmojiPicker) && <Picker onEmojiClick={handleEmojiClick} />}
         </div>
       </div>
     </>
@@ -87,11 +87,7 @@ InputFormMood.propTypes = {
 }
 
 class Vote extends Component {
-  propTypes = {
-    history: PropTypes.object,
-    location: PropTypes.object
-  }
-
+  abortController = new AbortController()
   state = {
     team: '',
     information: ''
@@ -102,25 +98,33 @@ class Vote extends Component {
   }
 
   refresh = async () => {
-    const parsed = queryString.parse(this.props.location.search)
-    if (parsed.team === undefined) {
-      this.setState({ team: MOOD.defaultTeam })
-    } else {
-      const teamName = await getTeamName(parsed.team)
-      this.setState({ team: teamName === undefined ? MOOD.defaultTeam : teamName })
+    try {
+      const parsed = queryString.parse(this.props.location.search)
+      if (parsed.team === undefined) {
+        this.setState({ team: MOOD.defaultTeam })
+      } else {
+        const teamName = await getTeamName(parsed.team, this.abortController.signal)
+        this.setState({ team: teamName === undefined ? MOOD.defaultTeam : teamName })
+      }
+    } catch (e) {
+      console.log(e)
     }
   }
 
   handleSelect = async moodId => {
-    const userMood = {
-      session: id,
-      day: dateOfDay('YYYY-MM-DD'),
-      rate: moodId,
-      team: this.state.team,
-      information: this.state.information
+    try {
+      const userMood = {
+        session: id,
+        day: dateOfDay('YYYY-MM-DD'),
+        rate: moodId,
+        team: this.state.team,
+        information: this.state.information
+      }
+      await postMood(userMood, this.abortController.signal)
+      this.props.history.push(`/report${this.props.location.search}`)
+    } catch (e) {
+      console.log(e)
     }
-    await postMood(userMood)
-    this.props.history.push(`/report${this.props.location.search}`)
   }
 
   handleInputChange = (event) => {
@@ -128,8 +132,11 @@ class Vote extends Component {
   }
 
   handleEmojiClick = (event, emoji) => {
-    console.log('handleEmojiClick', emoji)
     this.setState({ information: this.state.information + emoji })
+  }
+
+  componentWillUnmount () {
+    this.abortController.abort()
   }
 
   render () {
@@ -139,8 +146,8 @@ class Vote extends Component {
           <Header team={this.state.team} />
           <div className='d-flex flex-column flex-wrap justify-content-center h-100'>
             <p className='text-center'>{LABELS.question}</p>
-            <Options onSelect={this.handleSelect} />
             {IS_ACTIVATED.information && <InputFormMood onInputChange={this.handleInputChange} onEmojiClick={this.handleEmojiClick} inputInformation={this.state.information} />}
+            <Options onSelect={this.handleSelect} />
           </div>
 
           <Footer link='/report' libelle='Rapport' search={this.props.location.search} />
@@ -149,6 +156,11 @@ class Vote extends Component {
 
     )
   }
+}
+
+Vote.propTypes = {
+  history: PropTypes.object,
+  location: PropTypes.object
 }
 
 export default Vote

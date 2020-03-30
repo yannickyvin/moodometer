@@ -64,7 +64,6 @@ export const DetailTeamForm = (props) => {
 
   const copyUrlVote = () => {
     const urlVote = document.getElementById('urlVote')
-    console.log(urlVote)
     urlVote.select()
     document.execCommand('copy')
     props.onCopyText()
