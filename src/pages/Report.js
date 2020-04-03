@@ -52,7 +52,6 @@ class Report extends Component {
   }
 
   componentWillUnmount () {
-    console.log('report unmount')
   }
 
   render () {

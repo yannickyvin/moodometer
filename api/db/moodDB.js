@@ -53,7 +53,6 @@ module.exports = {
       paramsINOperator.push('$' + (i + 1))
     }
     const text = `select session, TO_CHAR(day, 'YYYY-MM-DD') as day, rate, team, information from mood where team in (${paramsINOperator.join(',')}) and day=TO_DATE($1, 'YYYY-MM-DD')`
-    console.log('text', text)
     return pool.query(text, [date, ...teams])
   },
   insertMood: (params) => {

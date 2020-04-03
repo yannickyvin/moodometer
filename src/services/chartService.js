@@ -36,6 +36,23 @@ export const createCompleteReport = (moods) => {
   return completeReport
 }
 
+export const createCountVoteReport = (moods) => {
+  // array of {day, count}
+  const countVoteReport = []
+  moods.forEach((mood) => {
+    const found = countVoteReport.findIndex((data) => (data.day === mood.day))
+
+    if (found === -1) {
+      countVoteReport.push({ day: mood.day, count: 1 })
+    } else {
+      const countVoteFound = countVoteReport.find(elt => elt.day === mood.day)
+      countVoteFound.count += 1
+    }
+  })
+  console.log(countVoteReport)
+  return countVoteReport
+}
+
 export const createWeekReport = (moods) => {
   const weekRate = []
 

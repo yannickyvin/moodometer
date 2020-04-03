@@ -3,9 +3,9 @@ import { Form, Button, Col } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 
 import { getTodayMoodsByTeams, getHistoryMoodsByTeams, getAllTeams } from '../services/moodClientService'
-import { createTodayReport, createCompleteReport, createWeekReport } from '../services/chartService'
+import { createTodayReport, createCompleteReport, createWeekReport, createCountVoteReport } from '../services/chartService'
 import { LABELS, IS_ACTIVATED } from '../config/config'
-import { ReportContainer, ReportToday, ReportTrendByDay, ReportTrendByWeek, LastInformations } from '../components/Report/ChartReport'
+import { ReportContainer, ReportToday, ReportCountVote, ReportTrendByDay, ReportTrendByWeek, LastInformations } from '../components/Report/ChartReport'
 import Layout from '../components/Layout'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
@@ -28,6 +28,7 @@ class AdminReport extends Component {
     historyLastWeeksMoods: [],
     completeReport: [],
     weekReport: [],
+    countVoteReport: [],
     teams: [],
     teamsChecked: [],
     maxWeeks: 3,
@@ -56,8 +57,9 @@ class AdminReport extends Component {
     const todayReport = createTodayReport(todayMoods)
     const completeReport = createCompleteReport(historyLastWeeksMoods)
     const weekReport = createWeekReport(historyAllMoods)
+    const countVoteReport = createCountVoteReport(historyLastWeeksMoods)
 
-    this.setState((prevState) => ({ todayMoods, historyLastWeeksMoods, todayReport, completeReport, weekReport, maxWeeksOnValidate: prevState.maxWeeks }))
+    this.setState((prevState) => ({ todayMoods, historyLastWeeksMoods, todayReport, completeReport, weekReport, countVoteReport, maxWeeksOnValidate: prevState.maxWeeks }))
   }
 
   handleChangeTeamsChecked (e) {
@@ -81,7 +83,6 @@ class AdminReport extends Component {
   }
 
   componentWillUnmount () {
-    console.log('AdminReport unmount')
   }
 
   render () {
@@ -112,6 +113,9 @@ class AdminReport extends Component {
                   <>
                     <ReportContainer activate={IS_ACTIVATED.reportByDay} label={LABELS.trendByDayReport(this.state.maxWeeksOnValidate)}>
                       <ReportTrendByDay reportDatas={this.state.completeReport} />
+                    </ReportContainer>
+                    <ReportContainer activate={IS_ACTIVATED.reportByDay} label={LABELS.trendByCountVoteReport(this.state.maxWeeksOnValidate)}>
+                      <ReportCountVote reportDatas={this.state.countVoteReport} />
                     </ReportContainer>
                     <ReportContainer activate={IS_ACTIVATED.reportByWeek} label={LABELS.trendByWeekReport}>
                       <ReportTrendByWeek reportDatas={this.state.weekReport} />
