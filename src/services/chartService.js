@@ -36,6 +36,23 @@ export const createCompleteReport = (moods) => {
   return completeReport
 }
 
+export const createAverageAndCountVoteReport = (moods) => {
+  // array of {day, average, count}
+  const averageAndCountVoteReport = []
+  moods.forEach((mood) => {
+    const found = averageAndCountVoteReport.findIndex((data) => (data.day === mood.day))
+
+    if (found === -1) {
+      averageAndCountVoteReport.push({ day: mood.day, average: mood.rate, count: 1 })
+    } else {
+      const eltFound = averageAndCountVoteReport.find(elt => elt.day === mood.day)
+      eltFound.average = ((eltFound.average * eltFound.count) + mood.rate) / (eltFound.count + 1)
+      eltFound.count += 1
+    }
+  })
+  return averageAndCountVoteReport
+}
+
 export const createCountVoteReport = (moods) => {
   // array of {day, count}
   const countVoteReport = []

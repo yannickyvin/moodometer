@@ -43,6 +43,7 @@ export const getTodayMoodsByTeams = async teams => {
 }
 
 export const getHistoryMoodsByTeams = async ({ teams, maxWeeks }, abortSignal) => {
+  console.log('getHistoryMoodsByTeams')
   try {
     let body
     if (maxWeeks === undefined) {
@@ -103,6 +104,7 @@ export const postMood = async (mood, abortSignal) => {
 }
 
 export const getAllTeams = async () => {
+  console.log('getAllTeams')
   try {
     const response = await fetch(`${apiUrl}/teams`)
     const content = await response.json()

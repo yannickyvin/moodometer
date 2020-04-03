@@ -3,10 +3,63 @@ import PropTypes from 'prop-types'
 import { Chart, Bar, Doughnut } from 'react-chartjs-2'
 import { MOOD } from '../../config/config.js'
 
-export const ReportContainer = ({ activate, label, children }) => {
-  return (
-    <>
-      {activate &&
+export const ReportAddPlugin = ({ children }) => {
+  useEffect(() => {
+    Chart.pluginService.register({
+      beforeRender: function (chart) {
+        if (chart.config.options.showAllTooltips) {
+          // create an array of tooltips
+          // we can't use the chart tooltip because there is only one tooltip per chart
+          chart.pluginTooltips = []
+          chart.config.data.datasets.forEach(function (dataset, i) {
+            chart.getDatasetMeta(i).data.forEach(function (sector, j) {
+              chart.pluginTooltips.push(new Chart.Tooltip({
+                _chart: chart.chart,
+                _chartInstance: chart,
+                _data: chart.data,
+                _options: chart.options.tooltips,
+                _active: [sector]
+              }, chart))
+            })
+          })
+
+          // turn off normal tooltips
+          chart.options.tooltips.enabled = false
+        }
+      },
+      afterDraw: function (chart, easing) {
+        if (chart.config.options.showAllTooltips) {
+          // we don't want the permanent tooltips to animate, so don't do anything till the animation runs atleast once
+          if (!chart.allTooltipsOnce) {
+            if (easing !== 1) { return }
+            chart.allTooltipsOnce = true
+          }
+
+          // turn on tooltips
+          chart.options.tooltips.enabled = true
+          Chart.helpers.each(chart.pluginTooltips, function (tooltip) {
+            tooltip.initialize()
+            tooltip.update()
+            // we don't actually need this since we are not animating tooltips
+            tooltip.pivot()
+            tooltip.transition(easing).draw()
+          })
+          chart.options.tooltips.enabled = false
+        }
+      }
+    })
+  }, [])
+
+  return (<>{children}</>)
+}
+
+ReportAddPlugin.propTypes = {
+  children: PropTypes.element.isRequired
+}
+
+export const ReportContainer = ({ activate, label, children }) => (
+  <>
+    {activate &&
         (
           <>
             <div className='h-20 w-100 my-2'>
@@ -17,9 +70,8 @@ export const ReportContainer = ({ activate, label, children }) => {
             </div>
           </>
         )}
-    </>
-  )
-}
+  </>
+)
 
 ReportContainer.propTypes = {
   activate: PropTypes.bool,
@@ -139,62 +191,46 @@ ReportTrendByDay.propTypes = {
   reportDatas: PropTypes.array
 }
 
-export const ReportCountVote = ({ reportDatas }) => {
+const optionsAverageAndCountBar = {
+  ...optionsBar,
+  tooltips: {
+    yAlign: 'top',
+    xAlign: 'center',
+    callbacks: {
+      title: () => null
+    }
+  },
+  showAllTooltips: true
+}
 
-  const optionsCountVote = {
-    ...optionsBar,
-    tooltips: {
-      yAlign: 'top',
-      xAlign: 'center'
-    },
-    showAllTooltips: true
+export const ReportAverageVote = ({ reportDatas }) => {
+  if ((!reportDatas) || (reportDatas.length === 0)) return null
+
+  const data = {
+    labels: reportDatas.map(m => m.day),
+    datasets: [{
+      label: 'Moyenne',
+      type: 'line',
+      fill: false,
+      steppedLine: false,
+      backgroundColor: 'rgb(15, 123, 255)',
+      borderColor: 'rgb(15, 123, 255)',
+      data: reportDatas.map(element => element.average)
+    }]
   }
 
-  useEffect(() => {
-    Chart.pluginService.register({
-      beforeRender: function (chart) {
-        if (chart.config.options.showAllTooltips) {
-          // create an array of tooltips
-          // we can't use the chart tooltip because there is only one tooltip per chart
-          chart.pluginTooltips = []
-          chart.config.data.datasets.forEach(function (dataset, i) {
-            chart.getDatasetMeta(i).data.forEach(function (sector, j) {
-              chart.pluginTooltips.push(new Chart.Tooltip({
-                _chart: chart.chart,
-                _chartInstance: chart,
-                _data: chart.data,
-                _options: chart.options.tooltips,
-                _active: [sector]
-              }, chart))
-            })
-          })
+  return <Bar data={data} options={optionsAverageAndCountBar} height={200} />
+}
 
-          // turn off normal tooltips
-          chart.options.tooltips.enabled = false
-        }
-      },
-      afterDraw: function (chart, easing) {
-        if (chart.config.options.showAllTooltips) {
-          // we don't want the permanent tooltips to animate, so don't do anything till the animation runs atleast once
-          if (!chart.allTooltipsOnce) {
-            if (easing !== 1) { return }
-            chart.allTooltipsOnce = true
-          }
+ReportAverageVote.propTypes = {
+  reportDatas: PropTypes.array
+}
 
-          // turn on tooltips
-          chart.options.tooltips.enabled = true
-          Chart.helpers.each(chart.pluginTooltips, function (tooltip) {
-            tooltip.initialize()
-            tooltip.update()
-            // we don't actually need this since we are not animating tooltips
-            tooltip.pivot()
-            tooltip.transition(easing).draw()
-          })
-          chart.options.tooltips.enabled = false
-        }
-      }
-    })
-  }, [])
+// Deep Clone Copy
+const optionsCountBar = JSON.parse(JSON.stringify(optionsAverageAndCountBar))
+optionsCountBar.scales.yAxes[0].ticks.stepSize = 1
+
+export const ReportCountVote = ({ reportDatas }) => {
 
   if ((!reportDatas) || (reportDatas.length === 0)) return null
 
@@ -211,7 +247,7 @@ export const ReportCountVote = ({ reportDatas }) => {
     }]
   }
 
-  return <Bar data={data} options={optionsCountVote} height={200} />
+  return <Bar data={data} options={optionsCountBar} height={200} />
 }
 
 ReportCountVote.propTypes = {

@@ -20,7 +20,6 @@ class Home extends Component {
   handleFacebookResponse = (e) => {}
 
   handleGoogleResponse = (response) => {
-    console.log('handleGoogleResponse')
     // eslint-disable-next-line no-undef
     const tokenBlob = new Blob([JSON.stringify({ access_token: response.accessToken }, null, 2)], { type: 'application/json' })
     const options = {
