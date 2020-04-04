@@ -228,7 +228,8 @@ ReportAverageVote.propTypes = {
 
 // Deep Clone Copy
 const optionsCountBar = JSON.parse(JSON.stringify(optionsAverageAndCountBar))
-optionsCountBar.scales.yAxes[0].ticks.stepSize = 1
+optionsCountBar.scales.yAxes[0].ticks.callback = function (value)  { if (Number.isInteger(value)) { return value } }
+optionsCountBar.tooltips.callbacks.title = () => null
 
 export const ReportCountVote = ({ reportDatas }) => {
 

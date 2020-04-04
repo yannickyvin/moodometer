@@ -46,28 +46,11 @@ export const createAverageAndCountVoteReport = (moods) => {
       averageAndCountVoteReport.push({ day: mood.day, average: mood.rate, count: 1 })
     } else {
       const eltFound = averageAndCountVoteReport.find(elt => elt.day === mood.day)
-      eltFound.average = ((eltFound.average * eltFound.count) + mood.rate) / (eltFound.count + 1)
+      eltFound.average = (((eltFound.average * eltFound.count) + mood.rate) / (eltFound.count + 1)).toFixed(1)
       eltFound.count += 1
     }
   })
   return averageAndCountVoteReport
-}
-
-export const createCountVoteReport = (moods) => {
-  // array of {day, count}
-  const countVoteReport = []
-  moods.forEach((mood) => {
-    const found = countVoteReport.findIndex((data) => (data.day === mood.day))
-
-    if (found === -1) {
-      countVoteReport.push({ day: mood.day, count: 1 })
-    } else {
-      const countVoteFound = countVoteReport.find(elt => elt.day === mood.day)
-      countVoteFound.count += 1
-    }
-  })
-  console.log(countVoteReport)
-  return countVoteReport
 }
 
 export const createWeekReport = (moods) => {
@@ -83,18 +66,13 @@ export const createWeekReport = (moods) => {
       year = 2020
     }
 
-    const found = weekRate.find(element => (element.week === week) && (element.year === year))
+    const eltFound = weekRate.find(element => (element.week === week) && (element.year === year))
 
-    if (found) {
-      found.average = ((found.average * found.count + mood.rate) / (found.count + 1)).toFixed(1)
-      found.count++
+    if (eltFound) {
+      eltFound.average = ((eltFound.average * eltFound.count + mood.rate) / (eltFound.count + 1)).toFixed(1)
+      eltFound.count++
     } else {
-      weekRate.push({
-        week,
-        year,
-        count: 1,
-        average: mood.rate
-      })
+      weekRate.push({ week, year, count: 1, average: mood.rate })
     }
   })
 
