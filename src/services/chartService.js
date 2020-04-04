@@ -33,6 +33,8 @@ export const createCompleteReport = (moods) => {
       }
     })
   }
+  completeReport.sort((a, b) => a.rate - b.rate)
+
   return completeReport
 }
 

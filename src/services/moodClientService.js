@@ -2,9 +2,9 @@
 import { dateOfDay } from './dateService'
 const apiUrl = process.env.REACT_APP_API_URL
 
-export const getAllMoods = async (abortSignal) => {
+export const getAllMoods = async () => {
   try {
-    const response = await fetch(`${apiUrl}/moods`, { signal: abortSignal })
+    const response = await fetch(`${apiUrl}/moods`)
     const content = await response.json()
     return content
   } catch (e) {
@@ -13,9 +13,9 @@ export const getAllMoods = async (abortSignal) => {
   }
 }
 
-export const getTodayMoodsByTeam = async (team, abortSignal) => {
+export const getTodayMoodsByTeam = async (team) => {
   try {
-    const response = await fetch(`${apiUrl}/moods/?date=${dateOfDay('YYYY-MM-DD')}&team=${team}`, { signal: abortSignal })
+    const response = await fetch(`${apiUrl}/moods/?date=${dateOfDay('YYYY-MM-DD')}&team=${team}`)
     const content = await response.json()
     return content
   } catch (e) {
@@ -42,8 +42,7 @@ export const getTodayMoodsByTeams = async teams => {
   }
 }
 
-export const getHistoryMoodsByTeams = async ({ teams, maxWeeks }, abortSignal) => {
-  console.log('getHistoryMoodsByTeams')
+export const getHistoryMoodsByTeams = async ({ teams, maxWeeks }) => {
   try {
     let body
     if (maxWeeks === undefined) {
@@ -57,8 +56,7 @@ export const getHistoryMoodsByTeams = async ({ teams, maxWeeks }, abortSignal) =
       body,
       headers: new Headers({
         'Content-Type': 'application/json'
-      }),
-      signal: abortSignal
+      })
     })
     const content = await response.json()
     return content
@@ -68,13 +66,13 @@ export const getHistoryMoodsByTeams = async ({ teams, maxWeeks }, abortSignal) =
   }
 }
 
-export const getHistoryMoodsByTeam = async ({ team, maxWeeks }, abortSignal) => {
+export const getHistoryMoodsByTeam = async ({ team, maxWeeks }) => {
   try {
     let response
     if (maxWeeks === undefined) {
-      response = await fetch(`${apiUrl}/moods/?team=${team}`, { signal: abortSignal })
+      response = await fetch(`${apiUrl}/moods/?team=${team}`)
     } else {
-      response = await fetch(`${apiUrl}/moods/?team=${team}&maxweeks=${maxWeeks}`, { signal: abortSignal })
+      response = await fetch(`${apiUrl}/moods/?team=${team}&maxweeks=${maxWeeks}`)
     }
     const content = await response.json()
     return content
@@ -84,7 +82,7 @@ export const getHistoryMoodsByTeam = async ({ team, maxWeeks }, abortSignal) => 
   }
 }
 
-export const postMood = async (mood, abortSignal) => {
+export const postMood = async (mood) => {
   try {
     const response = await fetch(`${apiUrl}/moods/`, {
       method: 'POST',
@@ -92,8 +90,7 @@ export const postMood = async (mood, abortSignal) => {
       body: JSON.stringify(mood),
       headers: new Headers({
         'Content-Type': 'application/json'
-      }),
-      signal: abortSignal
+      })
     })
     const updatedMood = await response.json()
     return updatedMood
@@ -104,7 +101,6 @@ export const postMood = async (mood, abortSignal) => {
 }
 
 export const getAllTeams = async () => {
-  console.log('getAllTeams')
   try {
     const response = await fetch(`${apiUrl}/teams`)
     const content = await response.json()
@@ -115,7 +111,7 @@ export const getAllTeams = async () => {
   }
 }
 
-export const postTeam = async (team, abortSignal) => {
+export const postTeam = async (team) => {
   try {
     const response = await fetch(`${apiUrl}/teams/`, {
       method: 'POST',
@@ -123,8 +119,7 @@ export const postTeam = async (team, abortSignal) => {
       body: JSON.stringify(team),
       headers: new Headers({
         'Content-Type': 'application/json'
-      }),
-      signal: abortSignal
+      })
     })
     const updatedTeam = await response.json()
     return updatedTeam
@@ -148,9 +143,9 @@ export const deleteTeam = async team => {
   }
 }
 
-export const getTeamName = async (teamId, abortSignal) => {
+export const getTeamName = async (teamId) => {
   try {
-    const response = await fetch(`${apiUrl}/teams?publicid=${teamId}`, { signal: abortSignal })
+    const response = await fetch(`${apiUrl}/teams?publicid=${teamId}`)
     const content = await response.json()
     const result = content.length === 0 ? undefined : content[0].nom
     return result

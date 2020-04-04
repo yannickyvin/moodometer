@@ -13,7 +13,6 @@ import { ConnectedContext } from '../components/ConnectedContext'
 import { AdminControl } from '../components/Admin/AdminControl'
 
 class AdminReport extends Component {
-  abortController = new AbortController()
 
   constructor (props) {
     super(props)
@@ -44,14 +43,14 @@ class AdminReport extends Component {
   }
 
   initTeams = async () => {
-    const teams = await getAllTeams({ signal: this.abortController.signal })
+    const teams = await getAllTeams()
     this.setState({ teams })
   }
 
   refresh = async () => {
-    const todayMoods = await getTodayMoodsByTeams(this.state.teamsChecked, this.abortController.signal)
-    const historyLastWeeksMoods = await getHistoryMoodsByTeams({ teams: this.state.teamsChecked, maxWeeks: this.state.maxWeeks }, this.abortController.signal)
-    const historyAllMoods = await getHistoryMoodsByTeams({ teams: this.state.teamsChecked }, this.abortController.signal)
+    const todayMoods = await getTodayMoodsByTeams(this.state.teamsChecked)
+    const historyLastWeeksMoods = await getHistoryMoodsByTeams({ teams: this.state.teamsChecked, maxWeeks: this.state.maxWeeks })
+    const historyAllMoods = await getHistoryMoodsByTeams({ teams: this.state.teamsChecked })
 
     const todayReport = createTodayReport(todayMoods)
     const completeReport = createCompleteReport(historyLastWeeksMoods)

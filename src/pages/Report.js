@@ -11,7 +11,6 @@ import Header from '../components/Header'
 import Footer from '../components/Footer'
 
 class Report extends Component {
-  abortController = new AbortController()
   state = {
     todayMoods: [],
     todayReport: [],
@@ -35,12 +34,12 @@ class Report extends Component {
       if (parsed.team === undefined) {
         team = MOOD.defaultTeam
       } else {
-        const teamName = await getTeamName(parsed.team, this.abortController.signal)
+        const teamName = await getTeamName(parsed.team)
         team = teamName === undefined ? MOOD.defaultTeam : teamName
       }
-      const todayMoods = await getTodayMoodsByTeam(team, this.abortController.signal)
-      const historyLastWeeksMoods = await getHistoryMoodsByTeam({ team, maxWeeks: REPORT_MAX_WEEKS }, this.abortController.signal)
-      const historyAllMoods = await getHistoryMoodsByTeam({ team }, this.abortController.signal)
+      const todayMoods = await getTodayMoodsByTeam(team)
+      const historyLastWeeksMoods = await getHistoryMoodsByTeam({ team, maxWeeks: REPORT_MAX_WEEKS })
+      const historyAllMoods = await getHistoryMoodsByTeam({ team })
 
       const todayReport = (todayMoods !== null) ? createTodayReport(todayMoods) : []
       const completeReport = (historyLastWeeksMoods !== null) ? createCompleteReport(historyLastWeeksMoods) : []
@@ -73,16 +72,12 @@ class Report extends Component {
             </div>
             <ReportAddPlugin>
               <>
+                <ReportContainer activate={IS_ACTIVATED.reportByDay} label={LABELS.trendByAverageVoteReport(3)}>
+                  <ReportAverageVote reportDatas={this.state.averageAndCountVoteReport} showAllTooltips />
+                </ReportContainer>
+
                 <ReportContainer activate={IS_ACTIVATED.reportByDay} label={LABELS.trendByDayReport(3)}>
                   <ReportTrendByDay reportDatas={this.state.completeReport} />
-                </ReportContainer>
-
-                <ReportContainer activate={IS_ACTIVATED.reportByDay} label={LABELS.trendByAverageVoteReport(3)}>
-                  <ReportAverageVote reportDatas={this.state.averageAndCountVoteReport} />
-                </ReportContainer>
-
-                <ReportContainer activate={IS_ACTIVATED.reportByDay} label={LABELS.trendByCountVoteReport(3)}>
-                  <ReportCountVote reportDatas={this.state.averageAndCountVoteReport} />
                 </ReportContainer>
 
                 <ReportContainer activate={IS_ACTIVATED.reportByWeek} label={LABELS.trendByWeekReport}>

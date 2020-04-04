@@ -87,7 +87,6 @@ InputFormMood.propTypes = {
 }
 
 class Vote extends Component {
-  abortController = new AbortController()
   state = {
     team: '',
     information: ''
@@ -103,7 +102,7 @@ class Vote extends Component {
       if (parsed.team === undefined) {
         this.setState({ team: MOOD.defaultTeam })
       } else {
-        const teamName = await getTeamName(parsed.team, this.abortController.signal)
+        const teamName = await getTeamName(parsed.team)
         this.setState({ team: teamName === undefined ? MOOD.defaultTeam : teamName })
       }
     } catch (e) {
@@ -120,7 +119,7 @@ class Vote extends Component {
         team: this.state.team,
         information: this.state.information
       }
-      await postMood(userMood, this.abortController.signal)
+      await postMood(userMood)
       this.props.history.push(`/report${this.props.location.search}`)
     } catch (e) {
       console.log(e)
@@ -136,7 +135,6 @@ class Vote extends Component {
   }
 
   componentWillUnmount () {
-    this.abortController.abort()
   }
 
   render () {
