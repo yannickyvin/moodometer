@@ -3,7 +3,7 @@ import { Form, Button, Col } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 
 import { getTodayMoodsByTeams, getHistoryMoodsByTeams, getAllTeams } from '../services/moodClientService'
-import { createTodayReport, createCompleteReport, createWeekReport, createCountVoteReport, createAverageAndCountVoteReport } from '../services/chartService'
+import { createTodayReport, createCompleteReport, createWeekReport, createAverageAndCountVoteReport } from '../services/chartService'
 import { LABELS, IS_ACTIVATED } from '../config/config'
 import { ReportAddPlugin, ReportContainer, ReportAverageVote, ReportCountVote, ReportTrendByDay, ReportTrendByWeek, LastInformations } from '../components/Report/ChartReport'
 import Layout from '../components/Layout'
@@ -114,10 +114,10 @@ class AdminReport extends Component {
                   <ReportAddPlugin>
                     <>
                       <ReportContainer activate={IS_ACTIVATED.reportByDay} label={LABELS.trendByAverageVoteReport(this.state.maxWeeksOnValidate)}>
-                        <ReportAverageVote reportDatas={this.state.averageAndCountVoteReport} />
+                        <ReportAverageVote reportDatas={this.state.averageAndCountVoteReport} showAllTooltips />
                       </ReportContainer>
                       <ReportContainer activate={IS_ACTIVATED.reportByDay} label={LABELS.trendByCountVoteReport(this.state.maxWeeksOnValidate)}>
-                        <ReportCountVote reportDatas={this.state.averageAndCountVoteReport} />
+                        <ReportCountVote reportDatas={this.state.averageAndCountVoteReport} showAllTooltips />
                       </ReportContainer>
                       <ReportContainer activate={IS_ACTIVATED.reportByDay} label={LABELS.trendByDayReport(this.state.maxWeeksOnValidate)}>
                         <ReportTrendByDay reportDatas={this.state.completeReport} />

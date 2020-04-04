@@ -172,13 +172,39 @@ const optionsBar = {
 export const ReportTrendByDay = ({ reportDatas }) => {
   if ((!reportDatas) || (reportDatas.length === 0)) return null
 
+  const optionsBarDay = {
+    maintainAspectRatio: false,
+    legend: false,
+    scales: {
+      xAxes: [{
+        gridLines: {
+          color: 'rgb(255, 255, 255, 0.2)'
+        },
+        ticks: {
+          fontColor: 'white'
+        },
+        stacked: true
+      }],
+      yAxes: [{
+        gridLines: {
+          color: 'rgb(255, 255, 255, 0.2)'
+        },
+        ticks: {
+          fontColor: 'white',
+          beginAtZero: true
+        },
+        stacked: true
+      }]
+    }
+  }
+
   const data = {
+    type: 'bar',
     labels: reportDatas[0].datas.map(m => m.day),
     datasets: reportDatas.map(o => ({
+      stack: 'stack',
       label: o.label,
-      type: 'line',
       data: o.datas.map(c => (c.count)),
-      fill: false,
       borderColor: o.color,
       backgroundColor: o.color
     }))
@@ -203,8 +229,25 @@ const optionsAverageAndCountBar = {
   showAllTooltips: true
 }
 
-export const ReportAverageVote = ({ reportDatas }) => {
+export const ReportAverageVote = ({ reportDatas, showAllTooltips }) => {
   if ((!reportDatas) || (reportDatas.length === 0)) return null
+
+  let optionsAverageBar
+  if (showAllTooltips) {
+    optionsAverageBar = {
+      ...optionsBar,
+      tooltips: {
+        yAlign: 'top',
+        xAlign: 'center',
+        callbacks: {
+          title: () => null
+        }
+      },
+      showAllTooltips: true
+    }
+  } else {
+    optionsAverageBar = optionsBar
+  }
 
   const data = {
     labels: reportDatas.map(m => m.day),
@@ -219,21 +262,35 @@ export const ReportAverageVote = ({ reportDatas }) => {
     }]
   }
 
-  return <Bar data={data} options={optionsAverageAndCountBar} height={200} />
+  return <Bar data={data} options={optionsAverageBar} height={200} />
 }
 
 ReportAverageVote.propTypes = {
-  reportDatas: PropTypes.array
+  reportDatas: PropTypes.array,
+  showAllTooltips: PropTypes.bool
 }
 
-// Deep Clone Copy
-const optionsCountBar = JSON.parse(JSON.stringify(optionsAverageAndCountBar))
-optionsCountBar.scales.yAxes[0].ticks.callback = function (value)  { if (Number.isInteger(value)) { return value } }
-optionsCountBar.tooltips.callbacks.title = () => null
-
-export const ReportCountVote = ({ reportDatas }) => {
-
+export const ReportCountVote = ({ reportDatas, showAllTooltips }) => {
   if ((!reportDatas) || (reportDatas.length === 0)) return null
+
+  let optionsCountBar
+  if (showAllTooltips) {
+    optionsCountBar = {
+      ...optionsBar,
+      tooltips: {
+        yAlign: 'top',
+        xAlign: 'center',
+        callbacks: {
+          title: () => null
+        }
+      },
+      showAllTooltips: true
+    }
+  } else {
+    optionsCountBar = optionsBar
+  }
+
+  optionsCountBar.scales.yAxes[0].ticks.callback = function (value) { if (Number.isInteger(value)) { return value } }
 
   const data = {
     labels: reportDatas.map(m => m.day),
@@ -252,7 +309,8 @@ export const ReportCountVote = ({ reportDatas }) => {
 }
 
 ReportCountVote.propTypes = {
-  reportDatas: PropTypes.array
+  reportDatas: PropTypes.array,
+  showAllTooltips: PropTypes.bool
 }
 
 export const ReportTrendByWeek = ({ reportDatas }) => {
