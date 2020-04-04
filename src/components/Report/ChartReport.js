@@ -172,32 +172,6 @@ const optionsBar = {
 export const ReportTrendByDay = ({ reportDatas }) => {
   if ((!reportDatas) || (reportDatas.length === 0)) return null
 
-  const optionsBarDay = {
-    maintainAspectRatio: false,
-    legend: false,
-    scales: {
-      xAxes: [{
-        gridLines: {
-          color: 'rgb(255, 255, 255, 0.2)'
-        },
-        ticks: {
-          fontColor: 'white'
-        },
-        stacked: true
-      }],
-      yAxes: [{
-        gridLines: {
-          color: 'rgb(255, 255, 255, 0.2)'
-        },
-        ticks: {
-          fontColor: 'white',
-          beginAtZero: true
-        },
-        stacked: true
-      }]
-    }
-  }
-
   const data = {
     type: 'bar',
     labels: reportDatas[0].datas.map(m => m.day),
@@ -217,18 +191,6 @@ ReportTrendByDay.propTypes = {
   reportDatas: PropTypes.array
 }
 
-const optionsAverageAndCountBar = {
-  ...optionsBar,
-  tooltips: {
-    yAlign: 'top',
-    xAlign: 'center',
-    callbacks: {
-      title: () => null
-    }
-  },
-  showAllTooltips: true
-}
-
 export const ReportAverageVote = ({ reportDatas, showAllTooltips }) => {
   if ((!reportDatas) || (reportDatas.length === 0)) return null
 
@@ -239,8 +201,12 @@ export const ReportAverageVote = ({ reportDatas, showAllTooltips }) => {
       tooltips: {
         yAlign: 'top',
         xAlign: 'center',
+        displayColors: false,
         callbacks: {
-          title: () => null
+          title: () => null,
+          label: (tooltipItem) => {
+            return tooltipItem.value
+          }
         }
       },
       showAllTooltips: true
@@ -280,8 +246,12 @@ export const ReportCountVote = ({ reportDatas, showAllTooltips }) => {
       tooltips: {
         yAlign: 'top',
         xAlign: 'center',
+        displayColors: false,
         callbacks: {
-          title: () => null
+          title: () => null,
+          label: (tooltipItem) => {
+            return tooltipItem.value
+          }
         }
       },
       showAllTooltips: true
