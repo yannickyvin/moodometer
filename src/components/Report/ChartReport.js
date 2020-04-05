@@ -50,11 +50,6 @@ export const ReportAddPlugin = ({ children }) => {
       }
     })
 
-    Chart.Tooltip.positioners.center = function (elements) {
-      const { x, y, base, width } = elements[0]._model
-      const height = base - y
-      return { x: x + (width / 2), y: y + (height / 2) }
-    }
   }, [])
 
   return (<>{children}</>)
@@ -177,38 +172,10 @@ const optionsBar = {
   }
 }
 
-export const ReportTrendByDay = ({ reportDatas, showAllTooltips }) => {
+export const ReportTrendByDay = ({ reportDatas }) => {
   if ((!reportDatas) || (reportDatas.length === 0)) return null
 
-  let optionsSumVotes
-
-  if (showAllTooltips) {
-    optionsSumVotes = {
-      ...optionsBar,
-      tooltips: {
-        position: 'center',
-        xAlign: 'left',
-        filter: function (tooltipItem, data) {
-          if (tooltipItem.value == 0) {
-            return false
-          } else {
-            return true
-          }
-        },
-        displayColors: false,
-        callbacks: {
-          title: () => null,
-          label: (tooltipItem) => {
-            return tooltipItem.value
-          }
-        }
-      },
-      showAllTooltips: true
-    }
-  } else {
-    optionsSumVotes = optionsBar
-  }
-
+  const optionsSumVotes = JSON.parse(JSON.stringify(optionsBar))
   optionsSumVotes.scales.yAxes[0].ticks.callback = function (value) { if (Number.isInteger(value)) { return value } }
 
   const data = {

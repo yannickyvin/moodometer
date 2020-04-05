@@ -119,7 +119,7 @@ class AdminReport extends Component {
                         <ReportCountVote reportDatas={this.state.averageAndCountVoteReport} showAllTooltips />
                       </ReportContainer>
                       <ReportContainer activate={IS_ACTIVATED.reportByDay} label={LABELS.trendByDayReport}>
-                        <ReportTrendByDay reportDatas={this.state.completeReport} showAllTooltips />
+                        <ReportTrendByDay reportDatas={this.state.completeReport} />
                       </ReportContainer>
                       <ReportContainer activate={IS_ACTIVATED.reportByWeek} label={LABELS.trendByWeekReport}>
                         <ReportTrendByWeek reportDatas={this.state.weekReport} showAllTooltips />
