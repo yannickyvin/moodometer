@@ -119,10 +119,10 @@ class AdminReport extends Component {
                         <ReportCountVote reportDatas={this.state.averageAndCountVoteReport} showAllTooltips />
                       </ReportContainer>
                       <ReportContainer activate={IS_ACTIVATED.reportByDay} label={LABELS.trendByDayReport}>
-                        <ReportTrendByDay reportDatas={this.state.completeReport} />
+                        <ReportTrendByDay reportDatas={this.state.completeReport} showAllTooltips />
                       </ReportContainer>
                       <ReportContainer activate={IS_ACTIVATED.reportByWeek} label={LABELS.trendByWeekReport}>
-                        <ReportTrendByWeek reportDatas={this.state.weekReport} />
+                        <ReportTrendByWeek reportDatas={this.state.weekReport} showAllTooltips />
                       </ReportContainer>
                       <ReportContainer activate={IS_ACTIVATED.reportLastInformations} label={LABELS.lastInformationReport(this.state.maxWeeksOnValidate)}>
                         <LastInformations moods={this.state.historyLastWeeksMoods} />

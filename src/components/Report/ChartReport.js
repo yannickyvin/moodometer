@@ -49,6 +49,12 @@ export const ReportAddPlugin = ({ children }) => {
         }
       }
     })
+
+    Chart.Tooltip.positioners.center = function (elements) {
+      const { x, y, base, width } = elements[0]._model
+      const height = base - y
+      return { x: x + (width / 2), y: y + (height / 2) }
+    }
   }, [])
 
   return (<>{children}</>)
@@ -171,10 +177,37 @@ const optionsBar = {
   }
 }
 
-export const ReportTrendByDay = ({ reportDatas }) => {
+export const ReportTrendByDay = ({ reportDatas, showAllTooltips }) => {
   if ((!reportDatas) || (reportDatas.length === 0)) return null
 
-  const optionsSumVotes = JSON.parse(JSON.stringify(optionsBar))
+  let optionsSumVotes
+
+  if (showAllTooltips) {
+    optionsSumVotes = {
+      ...optionsBar,
+      tooltips: {
+        position: 'center',
+        xAlign: 'left',
+        filter: function (tooltipItem, data) {
+          if (tooltipItem.value == 0) {
+            return false
+          } else {
+            return true
+          }
+        },
+        displayColors: false,
+        callbacks: {
+          title: () => null,
+          label: (tooltipItem) => {
+            return tooltipItem.value
+          }
+        }
+      },
+      showAllTooltips: true
+    }
+  } else {
+    optionsSumVotes = optionsBar
+  }
 
   optionsSumVotes.scales.yAxes[0].ticks.callback = function (value) { if (Number.isInteger(value)) { return value } }
 
@@ -194,7 +227,24 @@ export const ReportTrendByDay = ({ reportDatas }) => {
 }
 
 ReportTrendByDay.propTypes = {
-  reportDatas: PropTypes.array
+  reportDatas: PropTypes.array,
+  showAllTooltips: PropTypes.bool
+}
+
+const optionsBarShowAllTooltips = {
+  ...optionsBar,
+  tooltips: {
+    yAlign: 'top',
+    xAlign: 'center',
+    displayColors: false,
+    callbacks: {
+      title: () => null,
+      label: (tooltipItem) => {
+        return tooltipItem.value
+      }
+    }
+  },
+  showAllTooltips: true
 }
 
 export const ReportAverageVote = ({ reportDatas, showAllTooltips }) => {
@@ -202,21 +252,7 @@ export const ReportAverageVote = ({ reportDatas, showAllTooltips }) => {
 
   let optionsAverageBar
   if (showAllTooltips) {
-    optionsAverageBar = {
-      ...optionsBar,
-      tooltips: {
-        yAlign: 'top',
-        xAlign: 'center',
-        displayColors: false,
-        callbacks: {
-          title: () => null,
-          label: (tooltipItem) => {
-            return tooltipItem.value
-          }
-        }
-      },
-      showAllTooltips: true
-    }
+    optionsAverageBar = optionsBarShowAllTooltips
   } else {
     optionsAverageBar = optionsBar
   }
@@ -289,22 +325,33 @@ ReportCountVote.propTypes = {
   showAllTooltips: PropTypes.bool
 }
 
-export const ReportTrendByWeek = ({ reportDatas }) => {
+export const ReportTrendByWeek = ({ reportDatas, showAllTooltips }) => {
   if ((!reportDatas) || (reportDatas.length === 0)) return null
+
+  let optionsAverageByWeekBar
+  if (showAllTooltips) {
+    optionsAverageByWeekBar = optionsBarShowAllTooltips
+  } else {
+    optionsAverageByWeekBar = optionsBar
+  }
 
   const data = {
     labels: reportDatas.map(element => ('S' + element.week)),
     datasets: [{
       label: 'Moyenne de la semaine',
+      type: 'line',
+      fill: false,
+      steppedLine: false,
       backgroundColor: 'rgb(255, 99, 132)',
       borderColor: 'rgb(255, 99, 132)',
       data: reportDatas.map(element => element.average)
     }]
   }
 
-  return <Bar data={data} options={optionsBar} height={200} />
+  return <Bar data={data} options={optionsAverageByWeekBar} height={200} />
 }
 
 ReportTrendByWeek.propTypes = {
-  reportDatas: PropTypes.array
+  reportDatas: PropTypes.array,
+  showAllTooltips: PropTypes.bool
 }

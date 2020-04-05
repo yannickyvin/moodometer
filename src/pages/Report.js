@@ -81,7 +81,7 @@ class Report extends Component {
                 </ReportContainer>
 
                 <ReportContainer activate={IS_ACTIVATED.reportByWeek} label={LABELS.trendByWeekReport}>
-                  <ReportTrendByWeek reportDatas={this.state.weekReport} />
+                  <ReportTrendByWeek reportDatas={this.state.weekReport} showAllTooltips />
                 </ReportContainer>
 
                 <ReportContainer activate={IS_ACTIVATED.reportLastInformations} label={LABELS.lastInformationReport(3)}>
