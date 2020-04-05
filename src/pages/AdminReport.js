@@ -112,13 +112,13 @@ class AdminReport extends Component {
                 (this.state.completeReport.length > 0) && (
                   <ReportAddPlugin>
                     <>
-                      <ReportContainer activate={IS_ACTIVATED.reportByDay} label={LABELS.trendByAverageVoteReport(this.state.maxWeeksOnValidate)}>
+                      <ReportContainer activate={IS_ACTIVATED.reportByDay} label={LABELS.trendByAverageVoteReport}>
                         <ReportAverageVote reportDatas={this.state.averageAndCountVoteReport} showAllTooltips />
                       </ReportContainer>
-                      <ReportContainer activate={IS_ACTIVATED.reportByDay} label={LABELS.trendByCountVoteReport(this.state.maxWeeksOnValidate)}>
+                      <ReportContainer activate={IS_ACTIVATED.reportByDay} label={LABELS.trendByCountVoteReport}>
                         <ReportCountVote reportDatas={this.state.averageAndCountVoteReport} showAllTooltips />
                       </ReportContainer>
-                      <ReportContainer activate={IS_ACTIVATED.reportByDay} label={LABELS.trendByDayReport(this.state.maxWeeksOnValidate)}>
+                      <ReportContainer activate={IS_ACTIVATED.reportByDay} label={LABELS.trendByDayReport}>
                         <ReportTrendByDay reportDatas={this.state.completeReport} />
                       </ReportContainer>
                       <ReportContainer activate={IS_ACTIVATED.reportByWeek} label={LABELS.trendByWeekReport}>

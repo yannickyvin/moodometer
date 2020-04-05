@@ -16,9 +16,9 @@ export const LABELS = {
   informationUnderline: 'Avant de voter',
   informationNext: ', tu peux ajouter ici un mot en rapport avec ton humeur (évènement, tâche, difficulté...)',
   today: 'Aujourd\'hui',
-  trendByDayReport: (maxWeeks) => `Votes sur les ${maxWeeks} dernières semaines`,
-  trendByAverageVoteReport: (maxWeeks) => `Moyenne des votes sur les ${maxWeeks} dernières semaines`,
-  trendByCountVoteReport: (maxWeeks) => `Nombre de votes sur les ${maxWeeks} dernières semaines`,
+  trendByDayReport: 'Nombre de votes sur les derniers jours',
+  trendByAverageVoteReport: 'Moyenne des votes sur les derniers jours',
+  trendByCountVoteReport: 'Nombre de votes total sur les derniers jours',
   trendByWeekReport: 'Moyenne des votes par semaine',
   lastInformationReport: (maxWeeks) => `Commentaires sur les ${maxWeeks} dernières semaines`
 }

@@ -5,7 +5,7 @@ import queryString from 'query-string'
 import { getTodayMoodsByTeam, getHistoryMoodsByTeam, getTeamName } from '../services/moodClientService'
 import { createTodayReport, createCompleteReport, createAverageAndCountVoteReport, createWeekReport } from '../services/chartService'
 import { MOOD, REPORT_MAX_WEEKS, LABELS, IS_ACTIVATED } from '../config/config'
-import { ReportAddPlugin, ReportContainer, ReportToday, ReportAverageVote, ReportCountVote, ReportTrendByDay, ReportTrendByWeek, DailyInformations, LastInformations } from '../components/Report/ChartReport'
+import { ReportAddPlugin, ReportContainer, ReportToday, ReportAverageVote, ReportTrendByDay, ReportTrendByWeek, DailyInformations, LastInformations } from '../components/Report/ChartReport'
 import Layout from '../components/Layout'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
@@ -71,12 +71,12 @@ class Report extends Component {
               <p className='font-weight-light'>{LABELS.today}</p>
             </div>
             <ReportAddPlugin>
-              <>
-                <ReportContainer activate={IS_ACTIVATED.reportByDay} label={LABELS.trendByAverageVoteReport(3)}>
+              <div className='d-flex flex-column w-100'>
+                <ReportContainer activate={IS_ACTIVATED.reportByDay} label={LABELS.trendByAverageVoteReport}>
                   <ReportAverageVote reportDatas={this.state.averageAndCountVoteReport} showAllTooltips />
                 </ReportContainer>
 
-                <ReportContainer activate={IS_ACTIVATED.reportByDay} label={LABELS.trendByDayReport(3)}>
+                <ReportContainer activate={IS_ACTIVATED.reportByDay} label={LABELS.trendByDayReport}>
                   <ReportTrendByDay reportDatas={this.state.completeReport} />
                 </ReportContainer>
 
@@ -87,7 +87,7 @@ class Report extends Component {
                 <ReportContainer activate={IS_ACTIVATED.reportLastInformations} label={LABELS.lastInformationReport(3)}>
                   <LastInformations moods={this.state.historyLastWeeksMoods} />
                 </ReportContainer>
-              </>
+              </div>
             </ReportAddPlugin>
           </div>
 

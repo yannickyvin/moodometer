@@ -6,7 +6,7 @@ const Header = ({ team }) => {
   return (
     <>
       <header>
-        <Link className='header' to='admin'>Admin</Link>
+        <Link className='header' to='/admin'>Admin</Link>
       </header>
       <p className='font-weight italic'>Equipe : {team}</p>
     </>

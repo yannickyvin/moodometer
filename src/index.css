@@ -17,6 +17,15 @@ h2 {
   letter-spacing: -.5px;
 }
 
+hr {
+  border: 0;
+  clear:both;
+  display:block;
+  width: 100%;               
+  background-color: #cecece;
+  height: 1px;
+}
+
 .header, .footer {
   color: rgb(211, 247, 255);
 }
@@ -163,7 +172,7 @@ input.login_button {
 
 .app {
   background: rgba(104, 104, 104, 0.7);
-  background: linear-gradient(to right, rgba(255, 255, 255, 0.1),  rgba(104, 104, 104, 0.7),  rgba(104, 104, 104, 0.8) 50%, rgba(104, 104, 104, 0.7), rgba(255, 255, 255, 0.1));
+  background: linear-gradient(to right, rgba(66, 66, 66, 0.1),  rgba(66, 66, 66, 0.7),  rgba(66, 66, 66, 0.8) 50%, rgba(66, 66, 66, 0.7), rgba(66, 66, 66, 0.1));
 
   font-size: calc(14px + 3vmin);
   color: white;

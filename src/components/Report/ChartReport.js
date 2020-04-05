@@ -5,6 +5,7 @@ import { MOOD } from '../../config/config.js'
 
 export const ReportAddPlugin = ({ children }) => {
   useEffect(() => {
+    // Add showAllToolTips options
     Chart.pluginService.register({
       beforeRender: function (chart) {
         if (chart.config.options.showAllTooltips) {
@@ -61,14 +62,15 @@ export const ReportContainer = ({ activate, label, children }) => (
   <>
     {activate &&
         (
-          <>
-            <div className='h-20 w-100 my-2'>
+          <div className='d-flex flex-column w-100'>
+            <hr />
+            <div className='h-20 w-100 mt-4 mb-4'>
               {children}
             </div>
             <div className='d-flex justify-content-center'>
               <p className='font-weight-light'>{label}</p>
             </div>
-          </>
+          </div>
         )}
   </>
 )
@@ -172,6 +174,10 @@ const optionsBar = {
 export const ReportTrendByDay = ({ reportDatas }) => {
   if ((!reportDatas) || (reportDatas.length === 0)) return null
 
+  const optionsSumVotes = JSON.parse(JSON.stringify(optionsBar))
+
+  optionsSumVotes.scales.yAxes[0].ticks.callback = function (value) { if (Number.isInteger(value)) { return value } }
+
   const data = {
     type: 'bar',
     labels: reportDatas[0].datas.map(m => m.day),
@@ -184,7 +190,7 @@ export const ReportTrendByDay = ({ reportDatas }) => {
     }))
   }
 
-  return <Bar data={data} options={optionsBar} height={200} />
+  return <Bar data={data} options={optionsSumVotes} height={200} />
 }
 
 ReportTrendByDay.propTypes = {
