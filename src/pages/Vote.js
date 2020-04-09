@@ -63,7 +63,7 @@ const InputFormMood = ({ onInputChange, onEmojiClick, inputInformation }) => {
 
   return (
     <>
-      <div className='form-group my-4'>
+      <div className='form-group my-4 d-flex flex-column align-items-center'>
         <div className='d-flex flex-wrap form justify-content-center align-items-center'>
           <span id='wordhelp' className='inputlabelinformation px-1 my-2 form-text text-muted italic'>
             <u>{LABELS.informationUnderline}</u>{LABELS.informationNext}
