@@ -42,13 +42,15 @@ export const getTodayMoodsByTeams = async teams => {
   }
 }
 
-export const getHistoryMoodsByTeams = async ({ teams, maxWeeks }) => {
+export const getHistoryMoodsByTeams = async ({ teams, maxWeeks, maxDays }) => {
   try {
     let body
-    if (maxWeeks === undefined) {
+    if ((maxWeeks === undefined) && (maxDays === undefined)) {
       body = JSON.stringify({ teams })
-    } else {
+    } else if (maxDays === undefined) {
       body = JSON.stringify({ teams, maxweeks: maxWeeks })
+    } else {
+      body = JSON.stringify({ teams, maxdays: maxDays })
     }
     const response = await fetch(`${apiUrl}/moods/teams/list`, {
       method: 'POST',

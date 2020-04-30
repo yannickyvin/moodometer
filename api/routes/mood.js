@@ -23,12 +23,15 @@ router.post('/teams/list', async function (req, res) {
   const date = req.body.date
   const teams = ((req.body.teams === undefined) || (req.body.teams === '')) ? [config.DEFAULT_TEAM] : req.body.teams
   const maxWeeks = ((req.body.maxweeks === undefined) || (req.body.maxweeks === '')) ? 1 : req.body.maxweeks
+  const maxDays = ((req.body.maxdays === undefined) || (req.body.maxdays === '')) ? 1 : req.body.maxdays
   let moods
 
   if ((req.body.date !== undefined) && (req.body.date !== '')) {
     moods = await db.getMoodsByTeamsAndDay(teams, date)
   } else if ((req.body.maxweeks !== undefined) && (req.body.maxweeks !== '')) {
     moods = await db.getMoodsByTeamsAndMaxWeeks(teams, maxWeeks)
+  } else if ((req.body.maxdays !== undefined) && (req.body.maxdays !== '')) {
+    moods = await db.getMoodsByTeamsAndMaxDays(teams, maxDays)
   } else {
     moods = await db.getAllMoodsByTeams(teams)
   }

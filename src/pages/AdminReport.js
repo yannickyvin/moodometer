@@ -17,21 +17,21 @@ class AdminReport extends Component {
   constructor (props) {
     super(props)
     this.handleChangeTeamsChecked = this.handleChangeTeamsChecked.bind(this)
-    this.handleChangeMaxWeeks = this.handleChangeMaxWeeks.bind(this)
+    this.handleChangemaxDays = this.handleChangemaxDays.bind(this)
     this.handleGenerateReport = this.handleGenerateReport.bind(this)
   }
 
   state = {
     todayMoods: [],
     todayReport: [],
-    historyLastWeeksMoods: [],
+    historyLastDaysMoods: [],
     completeReport: [],
     weekReport: [],
     averageAndCountVoteReport: [],
     teams: [],
     teamsChecked: [],
-    maxWeeks: 3,
-    maxWeeksOnValidate: 3,
+    maxDays: 3,
+    maxDaysOnValidate: 3,
     team: ''
   }
 
@@ -49,15 +49,15 @@ class AdminReport extends Component {
 
   refresh = async () => {
     const todayMoods = await getTodayMoodsByTeams(this.state.teamsChecked)
-    const historyLastWeeksMoods = await getHistoryMoodsByTeams({ teams: this.state.teamsChecked, maxWeeks: this.state.maxWeeks })
+    const historyLastDaysMoods = await getHistoryMoodsByTeams({ teams: this.state.teamsChecked, maxDays: this.state.maxDays })
     const historyAllMoods = await getHistoryMoodsByTeams({ teams: this.state.teamsChecked })
 
     const todayReport = createTodayReport(todayMoods)
-    const completeReport = createCompleteReport(historyLastWeeksMoods)
+    const completeReport = createCompleteReport(historyLastDaysMoods)
     const weekReport = createWeekReport(historyAllMoods)
-    const averageAndCountVoteReport = createAverageAndCountVoteReport(historyLastWeeksMoods)
+    const averageAndCountVoteReport = createAverageAndCountVoteReport(historyLastDaysMoods)
 
-    this.setState((prevState) => ({ todayMoods, historyLastWeeksMoods, todayReport, completeReport, weekReport, averageAndCountVoteReport, maxWeeksOnValidate: prevState.maxWeeks }))
+    this.setState((prevState) => ({ todayMoods, historyLastDaysMoods, todayReport, completeReport, weekReport, averageAndCountVoteReport, maxDaysOnValidate: prevState.maxDays }))
   }
 
   handleChangeTeamsChecked (e) {
@@ -72,8 +72,8 @@ class AdminReport extends Component {
     }
   }
 
-  handleChangeMaxWeeks (e) {
-    this.setState({ maxWeeks: e.target.value })
+  handleChangemaxDays (e) {
+    this.setState({ maxDays: e.target.value })
   }
 
   handleGenerateReport (e) {
@@ -98,8 +98,8 @@ class AdminReport extends Component {
                     <Form.Check inline key={team.nom} name={team.nom} label={team.nom} type='checkbox' id={team.nom} onChange={this.handleChangeTeamsChecked} />
                   ))}
                   <div className='d-flex flex-row justify-content-center align-items-center w-100 my-2'>
-                    <Form.Label column sm='7'>Nombre de semaines : </Form.Label>
-                    <Col sm='2'><Form.Control type='number' onChange={this.handleChangeMaxWeeks} defaultValue={this.state.maxWeeks} /></Col>
+                    <Form.Label column sm='7'>Nombre de jours : </Form.Label>
+                    <Col sm='2'><Form.Control type='number' onChange={this.handleChangemaxDays} defaultValue={this.state.maxDays} /></Col>
                   </div>
                   <div className='d-flex flex-row justify-content-center align-items-center w-100 my-2'>
                     <Button variant='primary' onClick={this.handleGenerateReport}>
@@ -124,8 +124,8 @@ class AdminReport extends Component {
                       <ReportContainer activate={IS_ACTIVATED.reportByWeek} label={LABELS.trendByWeekReport}>
                         <ReportTrendByWeek reportDatas={this.state.weekReport} showAllTooltips />
                       </ReportContainer>
-                      <ReportContainer activate={IS_ACTIVATED.reportLastInformations} label={LABELS.lastInformationReport(this.state.maxWeeksOnValidate)}>
-                        <LastInformations moods={this.state.historyLastWeeksMoods} />
+                      <ReportContainer activate={IS_ACTIVATED.reportLastInformations} label={LABELS.lastInformationReport(this.state.maxDaysOnValidate)}>
+                        <LastInformations moods={this.state.historyLastDaysMoods} />
                       </ReportContainer>
                     </>
                   </ReportAddPlugin>

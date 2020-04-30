@@ -31,6 +31,14 @@ module.exports = {
     const text = `select session, TO_CHAR(day, 'YYYY-MM-DD') as day, rate, team, information from mood where team in (${paramsINOperator.join(',')}) and day > (now() - interval '${maxWeeks} week') order by mood.day`
     return pool.query(text, teams)
   },
+  getMoodsByTeamsAndMaxDays: (teams, maxDays) => {
+    const paramsINOperator = []
+    for (let i = 1; i <= teams.length; i++) {
+      paramsINOperator.push('$' + i)
+    }
+    const text = `select session, TO_CHAR(day, 'YYYY-MM-DD') as day, rate, team, information from mood where team in (${paramsINOperator.join(',')}) and day > (now() - interval '${maxDays} day') order by mood.day`
+    return pool.query(text, teams)
+  },
   getAllMoodsByTeam: (params) => {
     const text = "select session, TO_CHAR(day, 'YYYY-MM-DD') as day, rate, team, information from mood where team=$1 order by mood.day"
     return pool.query(text, params)
