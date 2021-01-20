@@ -302,8 +302,14 @@ export const ReportTrendByWeek = ({ reportDatas, showAllTooltips }) => {
     optionsAverageByWeekBar = optionsBar
   }
 
+  let labels = reportDatas.map(element => ('S' + element.week))
+  labels = labels.length > 15 ? labels.slice(labels.length - 15) : labels
+
+  let datasWeek = reportDatas.map(element => element.average)
+  datasWeek = datasWeek.length > 15 ? datasWeek.slice(datasWeek.length - 15) : datasWeek
+
   const data = {
-    labels: reportDatas.map(element => ('S' + element.week)),
+    labels: labels,
     datasets: [{
       label: 'Moyenne de la semaine',
       type: 'line',
@@ -311,7 +317,7 @@ export const ReportTrendByWeek = ({ reportDatas, showAllTooltips }) => {
       steppedLine: false,
       backgroundColor: 'rgb(255, 99, 132)',
       borderColor: 'rgb(255, 99, 132)',
-      data: reportDatas.map(element => element.average)
+      data: datasWeek
     }]
   }
 
